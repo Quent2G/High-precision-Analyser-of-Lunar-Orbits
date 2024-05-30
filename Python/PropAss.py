@@ -6,7 +6,7 @@ import spiceypy as sp
 import datetime as dt
 from tqdm import tqdm
 
-mat = read_mat('C:/Users/quent/Documents/MATLAB/LHPOP/ORBdata.mat')
+mat = read_mat('../MATLAB/LHPOP/ORBdata.mat')
 XJ2000 = mat["orb"]["XJ2000"]
 XDF = pd.DataFrame(XJ2000,columns = ["X","Y","Z","VX","VY","VZ"])
 sp.furnsh("lrorg_2021074_2021166_v01.bsp")
