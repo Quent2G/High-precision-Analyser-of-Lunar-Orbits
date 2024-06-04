@@ -43,7 +43,7 @@ addpath("mice\src\mice")
 %% Initialisation Variables
     % ==================================================================================================================================================
     ts = cputime;
-    Precise = 2;% 0=Fast 1=Precise else=user's choice --> Computing power
+    Precise = 2;% 0=Fast 1=Precise 2=Reference else=user's choice --> Computing power
     
     if Precise==0
         HarmD = 10;% maximum degree of the harmonics
@@ -61,9 +61,17 @@ addpath("mice\src\mice")
         RC = 1.3;   % reflection coefficient (0 No SRP - 1 black body - 2 total reflection - 1.3 example)
         AC = 0;     % albedo coefficient     (0 No albedo - 0.3 Earth Albedo coefficient)
         isGR = 1;   % Do we use general relativity
+    elseif Precise==2
+        HarmD = 70; % maximum degree of the harmonics
+        HarmO = 70; % maximum order of the harmonics (set 0 for only zonal harmonics)
+        isS = 1;    % Do we considere the Sun as a perturbation
+        isE = 1;    % Do we considere the Earth as a perturbation
+        RC = 1.3;   % reflection coefficient (0 No SRP - 1 black body - 2 total reflection - 1.3 example)
+        AC = 0;     % albedo coefficient     (0 No albedo - 0.3 Earth Albedo coefficient)
+        isGR = 1;   % Do we use general relativity
     else
-        HarmD = 70;% maximum degree of the harmonics
-        HarmO = 70;% maximum order of the harmonics (set 0 for only zonal harmonics)
+        HarmD = 250;% maximum degree of the harmonics
+        HarmO = 250;% maximum order of the harmonics (set 0 for only zonal harmonics)
         isS = 1;    % Do we considere the Sun as a perturbation
         isE = 1;    % Do we considere the Earth as a perturbation
         RC = 1.3;   % reflection coefficient (0 No SRP - 1 black body - 2 total reflection - 1.3 example)
@@ -73,17 +81,17 @@ addpath("mice\src\mice")
 
     Asat = 2;   % satellite area perpendicular to sun direction [m^2]
     msat = 1E3; % satellite mass [kg]
-    TStart = '2021 Apr 01 00:00:00.000';  % start time [yyyy month dd hh:mm:ss.---]
-    TStop =  '2021 Apr 02 00:00:00.000';  % stop time [yyyy month dd hh:mm:ss.---]
-    TStep = 1e-1; % Time step [s]
+    TStart = '2020 Feb 01 00:00:00.000';  % start time [yyyy month dd hh:mm:ss.---]
+    TStop =  '2020 Feb 02 00:00:00.000';  % stop time [yyyy month dd hh:mm:ss.---]
+    TStep = 30; % Time step [s]
     RefS = 'J2000';   % Reference System (J2000/MOON_ME)
     CoordT = 'Cartesian'; %Coordinates Type (Cartesian/Keplerian)
-    X = 3.81282724e+02; % Semi Major Axis
-    Y = 1.02198780e+03;    % Eccentricity
-    Z = -1.42503932e+03;    % Inclination
-    VX = -1.31649576e+00;    % Longitude of Ascending Node
-    VY = -6.17800830e-01;    % Argument of Periapsis
-    VZ  = -8.18155142e-01;    % Mean Anomaly
+    X = 8.20151464e+02; % Semi Major Axis
+    Y = 1.09123677e+03;    % Eccentricity
+    Z = 1.26278945e+03;    % Inclination
+    VX = 2.24588615e-01;    % Longitude of Ascending Node
+    VY = 1.11772284e+00;    % Argument of Periapsis
+    VZ  = -1.13910385e+00;    % Mean Anomaly
     SMA = 1800; % Semi Major Axis
     ECC = 0;    % Eccentricity
     INC = 0;    % Inclination
@@ -121,7 +129,9 @@ addpath("mice\src\mice")
     % ==================================================================================================================================================
     orb.prop.harmonics.degree   = HarmD; % maximum degree of the harmonics
     orb.prop.harmonics.order    = HarmO; % maximum order of the harmonics (set 0 for only zonal harmonics)
-    orb.prop.harmonics.filepath = [cd,'\moon165x165.txt'];
+    % orb.prop.harmonics.filepath = [cd,'\moon165x165.txt'];
+    orb.prop.harmonics.filepath = [cd,'\C_AIUB-GRL350B.txt'];
+    % orb.prop.harmonics.filepath = [cd,'\Conv_gggrx_1200a.txt'];
     % ==================================================================================================================================================
 
     % Harmonics coefficients
@@ -185,20 +195,8 @@ addpath("mice\src\mice")
     end
     % =========================================================================% 
 
-%% Harmonics coefficients
-    orb.prop.harmonics.Cnm = zeros(orb.prop.harmonics.degree+1,orb.prop.harmonics.degree+1);
-    orb.prop.harmonics.Snm = zeros(orb.prop.harmonics.degree+1,orb.prop.harmonics.degree+1);
-    fid = fopen(orb.prop.harmonics.filepath,'r');
-    for n=0:orb.prop.harmonics.degree
-        for m=0:n
-            temp = fscanf(fid,'%d %d %f %f',[4 1]);        
-            orb.prop.harmonics.Cnm(n+1,m+1) = temp(3);
-            orb.prop.harmonics.Snm(n+1,m+1) = temp(4);
-        end
-    end
-    
 %%  Propagation of the true state
-    options = odeset('RelTol',1e-6,'AbsTol',1e-9);
+    options = odeset('RelTol',1e-7,'AbsTol',1e-9);
     [orb.t,orb.XJ2000] = ode45(@prophpop,orb.epoch.span,orb.sat.X0iner,options,orb);
     rmpath([pwd,'\prop']);
     save('ORBdata','orb');
