@@ -1,0 +1,9 @@
+Title: Study of Geopotential order on Accuracy
+XLabel: Order
+YLabel: X-RMSE (km)
+
+Data: "Xdata Ydata"
+70 1.96e-1 4.19
+150 1.06e-1 10.4
+250 5.35e-2 20.5
+350 4.51e-2 37.6
