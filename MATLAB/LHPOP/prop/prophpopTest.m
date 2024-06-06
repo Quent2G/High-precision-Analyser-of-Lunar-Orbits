@@ -69,8 +69,14 @@ function [X] = prophpopTest(t,X0,model)
     % acceleration due to the Earth gravity field
     % ---------------------------------------------------------------------------------------------------------- %
     REarth_iner = cspice_pxfrm2(model.frame.fromE,model.frame.to,t,t);
-    acc_earth = accelharmonic(xJ2000,REarth_iner',model.prop.harmonics.degreeE,model.prop.harmonics.orderE,...
-        model.prop.harmonics.ECnm,model.prop.harmonics.ESnm,model.Earth.GM,model.Earth.RE);
+    R_Moon_Earth = cspice_spkezr('EARTH',t,model.frame.to,'NONE','MOON');
+    R_Moon_Earth = R_Moon_Earth(1:3);
+    R_Moon_Earth_3 = norm(R_Moon_Earth)^3;
+    acc_earth = accelharmonic(xJ2000-R_Moon_Earth,REarth_iner',model.prop.harmonics.degreeE,model.prop.harmonics.orderE,...
+                model.prop.harmonics.ECnm,model.prop.harmonics.ESnm,model.Earth.GM,model.Earth.RE) + ...
+                -accelharmonic(-R_Moon_Earth,REarth_iner',model.prop.harmonics.degreeE,model.prop.harmonics.orderE,...
+                model.prop.harmonics.ECnm,model.prop.harmonics.ESnm,model.Earth.GM,model.Earth.RE);
+                % -model.Earth.GM * R_Moon_Earth/R_Moon_Earth_3;
     % ---------------------------------------------------------------------------------------------------------- %   
     
     % acceleration due to the general relativity

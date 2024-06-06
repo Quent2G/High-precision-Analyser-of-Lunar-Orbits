@@ -6,11 +6,11 @@ import spiceypy as sp
 import datetime as dt
 from tqdm import tqdm
 
-mat = read_mat('../MATLAB/LHPOP/ORBdata.mat')
+mat = read_mat('../MATLAB/LHPOP/output/ORBdata.mat')
 XJ2000 = mat["orb"]["XJ2000"]
 XDF = pd.DataFrame(XJ2000,columns = ["X","Y","Z","VX","VY","VZ"])
-sp.furnsh("Utils/LRO_ES_90_202003_GRGM900C_L600.bsp")
-sp.furnsh("Utils/naif0012.tls")
+sp.furnsh("input/LRO_ES_90_202003_GRGM900C_L600.bsp")
+sp.furnsh("input/naif0012.tls")
 start,stop = mat['orb']['epoch']['et']
 
 ### plot moon and traj
@@ -77,4 +77,4 @@ for i in range(6):
 sp.kclear()
 plt.show()
 
-# sp.dafec(sp.spklef("Utils/LRO_ES_90_202003_GRGM900C_L600.bsp"),1000)
+# sp.dafec(sp.spklef("input/LRO_ES_90_202003_GRGM900C_L600.bsp"),1000)

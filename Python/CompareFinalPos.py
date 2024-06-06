@@ -6,11 +6,11 @@ import spiceypy as sp
 from datetime import datetime
 
 
-mat = read_mat('../MATLAB/LHPOP/ORBdata.mat')
+mat = read_mat('../MATLAB/LHPOP/output/ORBdata.mat')
 XJ2000 = mat["orb"]["XJ2000"]
 XDF = pd.DataFrame(XJ2000,columns = ["X","Y","Z","VX","VY","VZ"])
-sp.furnsh("lrorg_2021074_2021166_v01.bsp")
-sp.furnsh("naif0012.tls")
+sp.furnsh("input/LRO_ES_90_202003_GRGM900C_L600.bsp")
+sp.furnsh("input/naif0012.tls")
 
 ### plot moon and traj
 fig = plt.figure()
