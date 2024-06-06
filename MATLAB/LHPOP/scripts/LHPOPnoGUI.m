@@ -37,18 +37,76 @@
 % Sapienza University of Rome, 08-25-2017
 % ennio.condoleo@uniroma1.it
 
+%% Initialisation Variables
+    % ==================================================================================================================================================
+    ts = cputime;
+    Precise = 2;% 0=Fast 1=Precise 2=Reference else=user's choice --> Computing power
+    
+    if Precise==0
+        HarmD = 10;% maximum degree of the harmonics
+        HarmO = 10;% maximum order of the harmonics (set 0 for only zonal harmonics)
+        isS = 0;    % Do we considere the Sun as a perturbation
+        isE = 0;    % Do we considere the Earth as a perturbation
+        RC = 0;   % reflection coefficient (0 No SRP - 1 black body - 2 total reflection - 1.3 example)
+        AC = 0;     % albedo coefficient     (0 No albedo - 0.3 Earth Albedo coefficient)
+        isGR = 0;   % Do we use general relativity
+    elseif Precise==1
+        HarmD = 100;% maximum degree of the harmonics
+        HarmO = 100;% maximum order of the harmonics (set 0 for only zonal harmonics)
+        isS = 1;    % Do we considere the Sun as a perturbation
+        isE = 1;    % Do we considere the Earth as a perturbation
+        RC = 1.3;   % reflection coefficient (0 No SRP - 1 black body - 2 total reflection - 1.3 example)
+        AC = 0;     % albedo coefficient     (0 No albedo - 0.3 Earth Albedo coefficient)
+        isGR = 1;   % Do we use general relativity
+    elseif Precise==2
+        HarmD = 70; % maximum degree of the harmonics
+        HarmO = 70; % maximum order of the harmonics (set 0 for only zonal harmonics)
+        isS = 1;    % Do we considere the Sun as a perturbation
+        isE = 1;    % Do we considere the Earth as a perturbation
+        RC = 1.3;   % reflection coefficient (0 No SRP - 1 black body - 2 total reflection - 1.3 example)
+        AC = 0;     % albedo coefficient     (0 No albedo - 0.3 Earth Albedo coefficient)
+        isGR = 1;   % Do we use general relativity
+    else
+        HarmD = 250;% maximum degree of the harmonics
+        HarmO = 250;% maximum order of the harmonics (set 0 for only zonal harmonics)
+        isS = 1;    % Do we considere the Sun as a perturbation
+        isE = 1;    % Do we considere the Earth as a perturbation
+        RC = 1.3;   % reflection coefficient (0 No SRP - 1 black body - 2 total reflection - 1.3 example)
+        AC = 0;     % albedo coefficient     (0 No albedo - 0.3 Earth Albedo coefficient)
+        isGR = 1;   % Do we use general relativity
+    end
+
+    Asat = 2;   % satellite area perpendicular to sun direction [m^2]
+    msat = 1E3; % satellite mass [kg]
+    TStart = '2020 Feb 01 00:00:00.000';  % start time [yyyy month dd hh:mm:ss.---]
+    TStop =  '2020 Feb 02 00:00:00.000';  % stop time [yyyy month dd hh:mm:ss.---]
+    TStep = 30; % Time step [s]
+    RefS = 'J2000';   % Reference System (J2000/MOON_ME)
+    CoordT = 'Cartesian'; %Coordinates Type (Cartesian/Keplerian)
+    X = 8.20151464e+02; % Semi Major Axis
+    Y = 1.09123677e+03;    % Eccentricity
+    Z = 1.26278945e+03;    % Inclination
+    VX = 2.24588615e-01;    % Longitude of Ascending Node
+    VY = 1.11772284e+00;    % Argument of Periapsis
+    VZ  = -1.13910385e+00;    % Mean Anomaly
+    SMA = 1800; % Semi Major Axis
+    ECC = 0;    % Eccentricity
+    INC = 0;    % Inclination
+    LAN = 0;    % Longitude of Ascending Node
+    AOP = 0;    % Argument of Periapsis
+    MA  = 0;    % Mean Anomaly
+
 %% SPICE LIBRARIES
     % ==================================================================================================================================================
+    addpath("mice\lib")
+    addpath("mice\src\mice")
+    addpath([pwd,'\prop']);
+
     cspice_kclear; 
     metakernelcheck;
     cspice_furnsh('metakernel.tm');
-    % ==================================================================================================================================================
-    fig = computeOrbitGUI;
-    waitfor(fig);
-    addpath([pwd,'\prop']);
-    
-    %#ok<*SUSENS> 
-    %% FORCE MODEL
+
+%% FORCE MODEL
     % ==================================================================================================================================================
     orb.frame.integr = 'J2000';   % integration frame (inertial)
     orb.frame.from   = 'MOON_ME'; % frame where the gravity potential is defined
@@ -61,17 +119,19 @@
     orb.centralPlanet.RE  = 1737.74;       % Radius of the Moon                                  [km]
     orb.centralPlanet.GM  = 4902.7926024;          % Gravitational parameter of the Moon                   [km^3 s^-2]
     % Point Masses
-    orb.pointMasses.M(1)  = 1.9884e30*ORBguidata{3};     % Mass of the Sun                                       [kg]
-    orb.pointMasses.M(2)  = 5.97218639e24*ORBguidata{4};     % Mass of the Earth                                      [kg]
+    orb.pointMasses.M(1)  = 1.9884e30*isS;             % Mass of the Sun                                       [kg]
+    orb.pointMasses.M(2)  = 5.97218639e24*isE;        % Mass of the Earth                                      [kg]
     orb.pointMasses.GM    = orb.const.G.*orb.pointMasses.M;        % Gravitational parameter of the Third Bodies           [km^3 s^-2]
     % ==================================================================================================================================================
     orb.pointMasses.numb = length(orb.pointMasses.M);
 
 %% Gravity model
     % ==================================================================================================================================================
-    orb.prop.harmonics.degree   = ORBguidata{1}; % maximum degree of the harmonics
-    orb.prop.harmonics.order    = ORBguidata{2}; % maximum order of the harmonics (set 0 for only zonal harmonics)
-    orb.prop.harmonics.filepath = [cd,'\moon165x165.txt'];
+    orb.prop.harmonics.degree   = HarmD; % maximum degree of the harmonics
+    orb.prop.harmonics.order    = HarmO; % maximum order of the harmonics (set 0 for only zonal harmonics)
+    % orb.prop.harmonics.filepath = [cd,'\input\gravity_models\Moon165x165.txt'];
+    orb.prop.harmonics.filepath = [cd,'\input\gravity_models\Moon_AIUB-GRL350B.txt'];
+    % orb.prop.harmonics.filepath = [cd,'\input\gravity_models\Moon_gggrx_1200a.txt'];
     % ==================================================================================================================================================
 
     % Harmonics coefficients
@@ -81,35 +141,34 @@
     % ==================================================================================================================================================
     orb.const.c    = 299792.458; % light speed in the vacuum [km/s];
     orb.const.Ls   = 3.839e26;   % Sun brightness power [W]
-    orb.sat.srp.A  = ORBguidata{18};          % satellite area perpendicular to sun direction [m^2]
-    orb.sat.srp.m  = ORBguidata{17};        % satellite mass [kg]
-    orb.sat.srp.CR = ORBguidata{19};          % reflection coefficient (0 No SRP - 1 black body - 2 total reflection)
-    orb.sat.alb.CR = ORBguidata{20};        % albedo coefficient     (0 No albedo - 0.3 Earth Albedo coefficient)
+    orb.sat.srp.A  = Asat;
+    orb.sat.srp.m  = msat;
+    orb.sat.srp.CR = RC;
+    orb.sat.alb.CR = AC;
     % ==================================================================================================================================================
 
 %% General Relativity
     % ==================================================================================================================================================
-    orb.sat.rel    = ORBguidata{14};
+    orb.sat.rel    = isGR;
     % ==================================================================================================================================================
 
 %% Analisys start time and stop time
     % ==================================================================================================================================================
-    orb.epoch.start = ORBguidata{5};                                                   % start time [yyyy month dd hh:mm:ss.---]
-    orb.epoch.stop  = ORBguidata{21};   % stop  time [yyyy month dd hh:mm:ss.---]
+    orb.epoch.start = TStart;
+    orb.epoch.stop  = TStop;
     % ==================================================================================================================================================
     orb.epoch.str   = char(orb.epoch.start,orb.epoch.stop);   
     orb.epoch.et    = cspice_str2et(orb.epoch.str); % seconds past the Julian Date
     
-    orb.epoch.span = orb.epoch.et(1):ORBguidata{22}:orb.epoch.et(end);%+params.orb.periodTrig;
+    orb.epoch.span = orb.epoch.et(1):TStep:orb.epoch.et(end);%+params.orb.periodTrig;
     % ==================================================================================================================================================
 
 %% Initialization
 % position and velocity
     % =========================================================================% 
-    orb.frame.initstate = ORBguidata{6};
-    if strcmp(ORBguidata{7},'Cartesian')
-        orb.sat.X0 = [ORBguidata{8};ORBguidata{9};ORBguidata{10};...
-            ORBguidata{11};ORBguidata{12};ORBguidata{13}];
+    orb.frame.initstate = RefS;
+    if strcmp(CoordT,'Cartesian')
+        orb.sat.X0 = [X,Y,Z,VX,VY,VZ];
         if ~strcmp(orb.frame.initstate,{'ICRF','J2000'})
             Rgeog_iner = cspice_sxform(orb.frame.initstate,orb.frame.to,orb.epoch.et(1));
             orb.sat.X0iner = Rgeog_iner*orb.sat.X0;
@@ -117,12 +176,12 @@
             orb.sat.X0iner = orb.sat.X0;
         end
     else
-        orb.sat.keplstate(1,1:2) = {'SMA',ORBguidata{8}};        % semi-major axis             [km]
-        orb.sat.keplstate(2,1:2) = {'ECC',ORBguidata{9}};        % eccentricity
-        orb.sat.keplstate(3,1:2) = {'INC',ORBguidata{10}*(pi/180)};  % inclination                 [rad]
-        orb.sat.keplstate(4,1:2) = {'LAN',ORBguidata{11}*(pi/180)};   % longitude of ascending node [rad]
-        orb.sat.keplstate(5,1:2) = {'AOP',ORBguidata{12}*(pi/180)};   % argument of pericenter      [rad]
-        orb.sat.keplstate(6,1:2)  = {'MA',ORBguidata{13}*(pi/180)};
+        orb.sat.keplstate(1,1:2) = {'SMA',SMA};        % semi-major axis             [km]
+        orb.sat.keplstate(2,1:2) = {'ECC',ECC};        % eccentricity
+        orb.sat.keplstate(3,1:2) = {'INC',INC*(pi/180)};  % inclination                 [rad]
+        orb.sat.keplstate(4,1:2) = {'LAN',LAN*(pi/180)};   % longitude of ascending node [rad]
+        orb.sat.keplstate(5,1:2) = {'AOP',AOP*(pi/180)};   % argument of pericenter      [rad]
+        orb.sat.keplstate(6,1:2)  = {'MA',MA*(pi/180)};
         orb.sat.X0 = (cspice_conics([ orb.sat.keplstate{1,2}*(1-orb.sat.keplstate{2,2}),orb.sat.keplstate{2,2},orb.sat.keplstate{3,2},...
                                     orb.sat.keplstate{4,2},orb.sat.keplstate{5,2},orb.sat.keplstate{6,2},...
                                     orb.epoch.et(1),orb.centralPlanet.GM]',orb.epoch.et(1)))';
@@ -136,21 +195,13 @@
     end
     % =========================================================================% 
 
-%% Harmonics coefficients
-    orb.prop.harmonics.Cnm = zeros(orb.prop.harmonics.degree+1,orb.prop.harmonics.degree+1);
-    orb.prop.harmonics.Snm = zeros(orb.prop.harmonics.degree+1,orb.prop.harmonics.degree+1);
-    fid = fopen(orb.prop.harmonics.filepath,'r');
-    for n=0:orb.prop.harmonics.degree
-        for m=0:n
-            temp = fscanf(fid,'%d %d %f %f',[4 1]);        
-            orb.prop.harmonics.Cnm(n+1,m+1) = temp(3);
-            orb.prop.harmonics.Snm(n+1,m+1) = temp(4);
-        end
-    end
-
 %%  Propagation of the true state
-    options = odeset('RelTol',1e-6,'AbsTol',1e-9);
+    options = odeset('RelTol',1e-7,'AbsTol',1e-9);
     [orb.t,orb.XJ2000] = ode45(@prophpop,orb.epoch.span,orb.sat.X0iner,options,orb);
+    save('output\ORBdata','orb');
+    % ORBIT3D;
+    disp(num2str(cputime - ts)+"s")
+    
     rmpath([pwd,'\prop']);
-    save('ORBdata','orb');
-    ORBIT3D;
+    rmpath("mice\lib")
+    rmpath("mice\src\mice")

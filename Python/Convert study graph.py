@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 
-with open("Utils/Study.txt") as file:
+with open("input/Study.txt") as file:
     Lines = file.readlines()
 
 fig,axS = plt.subplots()

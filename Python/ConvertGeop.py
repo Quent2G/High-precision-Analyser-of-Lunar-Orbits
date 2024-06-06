@@ -1,9 +1,9 @@
 
 
-with open("Utils/EGM96.gfc") as text:
+with open("input/EGM96.gfc") as text:
     Lines = text.readlines()
 
-with open("Utils/C_EGM96.gfc","w") as NT:
+with open("input/C_EGM96.gfc","w") as NT:
     l = 1
     for line in Lines:
         if l==1:
