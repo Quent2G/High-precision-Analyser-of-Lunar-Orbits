@@ -40,7 +40,7 @@
 %% Initialisation Variables
     % ==================================================================================================================================================
     ts = cputime;
-    Precise = 2;% 0=Fast 1=Precise 2=Reference else=user's choice --> Computing power
+    Precise = 0;% 0=Reference else=user's choice --> Computing power
     
     if Precise==0
         HarmD = 70; % maximum degree of the harmonics
@@ -60,8 +60,6 @@
         isGR = 1;   % Do we use general relativity
     end
 
-    HarmDE = 3; % maximum degree of the harmonics for Earth
-    HarmOE = 3; % maximum order of the harmonics (set 0 for only zonal harmonics) for Earth
     Asat = 2;   % satellite area perpendicular to sun direction [m^2]
     msat = 1E3; % satellite mass [kg]
     TStart = '2020 Feb 01 00:00:00.000';  % start time [yyyy month dd hh:mm:ss.---]
@@ -91,27 +89,22 @@
     cspice_kclear; 
     metakernelcheck;
     cspice_furnsh('metakernel.tm');
-    
+
 %% FORCE MODEL
     % ==================================================================================================================================================
     orb.frame.integr = 'J2000';   % integration frame (inertial)
     orb.frame.from   = 'MOON_ME'; % frame where the gravity potential is defined
-    orb.frame.fromE   = 'IAU_EARTH'; % frame where the gravity potential is defined
     orb.frame.to     = orb.frame.integr;
     orb.centralPlanet.stringName = 'Moon';
-    orb.Earth.stringName = 'Earth';
-    orb.pointMasses.stringName   = {'Sun'};
+    orb.pointMasses.stringName   = {'Sun','Earth'};
     % Physical Constants
     orb.const.G           = 6.67428e-20;   % Universal gravitational constant                      [km^3 kg^-1 s^-2]
-    % Moon
+    % Central Planet
     orb.centralPlanet.RE  = 1737.74;       % Radius of the Moon                                  [km]
-    orb.centralPlanet.GM  = 4902.7926024;  % Gravitational parameter of the Moon                   [km^3 s^-2]
-    % Earth
-    orb.Earth.RE  = 6371.00;               % Radius of the Earth                                  [km]
-    orb.Earth.M  = 5.97218639e24*isE;        % Mass of the Earth                                      [kg]
-    orb.Earth.GM  = orb.const.G.*orb.Earth.M;          % Gravitational parameter of the Earth                   [km^3 s^-2]
-    % Point Masse : Sun
+    orb.centralPlanet.GM  = 4902.7926024;          % Gravitational parameter of the Moon                   [km^3 s^-2]
+    % Point Masses
     orb.pointMasses.M(1)  = 1.9884e30*isS;             % Mass of the Sun                                       [kg]
+    orb.pointMasses.M(2)  = 5.97218639e24*isE;        % Mass of the Earth                                      [kg]
     orb.pointMasses.GM    = orb.const.G.*orb.pointMasses.M;        % Gravitational parameter of the Third Bodies           [km^3 s^-2]
     % ==================================================================================================================================================
     orb.pointMasses.numb = length(orb.pointMasses.M);
@@ -123,15 +116,10 @@
     % orb.prop.harmonics.filepath = [cd,'/input/gravity_models/Moon165x165.txt'];
     orb.prop.harmonics.filepath = [cd,'/input/gravity_models/Moon_AIUB-GRL350B.txt'];
     % orb.prop.harmonics.filepath = [cd,'/input/gravity_models/Moon_gggrx_1200a.txt'];
-
-    orb.prop.harmonics.degreeE   = HarmDE; % maximum degree of the harmonics
-    orb.prop.harmonics.orderE    = HarmOE; % maximum order of the harmonics (set 0 for only zonal harmonics)
-    orb.prop.harmonics.filepathE = [cd,'/input/gravity_models/Earth_EGM96.txt'];
     % ==================================================================================================================================================
 
     % Harmonics coefficients
     [orb.prop.harmonics.Cnm,orb.prop.harmonics.Snm] = normalizedharmonics(orb.prop.harmonics.filepath,orb.prop.harmonics.degree);
-    [orb.prop.harmonics.ECnm,orb.prop.harmonics.ESnm] = normalizedharmonics(orb.prop.harmonics.filepathE,orb.prop.harmonics.degreeE);
 
 %% Solar Radiation Pressure and Earth Albedo
     % ==================================================================================================================================================
@@ -190,10 +178,10 @@
         end
     end
     % =========================================================================% 
-  
+
 %%  Propagation of the true state
-    options = odeset('RelTol',1e-7,'AbsTol',1e-12);
-    [orb.t,orb.XJ2000] = ode78(@prophpopTest,orb.epoch.span,orb.sat.X0iner,options,orb);
+    options = odeset('RelTol',100e-9,'AbsTol',1e-12);
+    [orb.t,orb.XJ2000] = ode89(@prophpop,orb.epoch.span,orb.sat.X0iner,options,orb);
     save('output/ORBdata','orb');
     % ORBIT3D;
     disp(num2str(cputime - ts)+"s")
