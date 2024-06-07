@@ -33,12 +33,12 @@
     % current directory
     pathRun = cd;
     % adding tools: lunarhpop.m, dragzoom.m, force_delete.m
-    pathToTools = [pathRun,'\tools'];
+    pathToTools = [pathRun,'/tools'];
     addpath(pathToTools);
     % loading spice kernels
     cspice_furnsh('metakernel.tm');
     % loading ORB data
-    load('output\ORBdata.mat');
+    load('output/ORBdata.mat');
 % =========================================================================================================================================================
 
 %% USER'S INPUT
@@ -66,7 +66,7 @@
     cspice_furnsh('metakernel.tm');
 
     lengthaxis  = norm(orb.XJ2000(1,1:3));
-    image_file  = 'input\Moon_grid.bmp';
+    image_file  = 'input/Moon_grid.bmp';
     RE          = 1737.74;
     R_ECI_SCSF  = cspice_pxform('J2000','MOON_ME',orb.t');
     R_ECI_INER  = cspice_pxform('J2000','MOON_ME',orb.t(1));

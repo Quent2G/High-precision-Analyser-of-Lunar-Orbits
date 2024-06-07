@@ -62,16 +62,28 @@ for i in tqdm(range(round(Tspan/Tstep)+1)):
         Err[j].append(state[j]-XJ2000[i,j])
 
 # plotting the 6 errors graphs
-fig2 = plt.figure(figsize=(18,4.8))
-axes = fig2.subplots(2,3)
-for i in range(6):
-    axes[i//3,i%3].plot(np.arange(0,Tspan+Tstep/2,Tstep),Err[i],
-                        label="RMSE = "+'{:.2e}'.format(np.sqrt((np.array(Err[i])**2).sum()/len(Err[i])))+[" km"," km/s"][i//3])
-    axes[i//3,i%3].set_xlabel('s')
-    axes[i//3,i%3].set_ylabel(f'error in {["X (km)","Y (km)","Z (km)","VX (km/s)","VY (km/s)","VZ (km/s)"][i]}')
-    axes[i//3,i%3].set_ylim([-.2,-.2e-3][i//3],[.2,.2e-3][i//3])
-    axes[i//3,i%3].plot([0,Tspan],[0,0])
-    axes[i//3,i%3].legend()
+# fig2 = plt.figure(figsize=(18,4.8))
+# axes = fig2.subplots(2,3)
+# for i in range(6):
+#     axes[i//3,i%3].plot(np.arange(0,Tspan+Tstep/2,Tstep),Err[i],
+#                         label="RMSE = "+'{:.2e}'.format(np.sqrt((np.array(Err[i])**2).sum()/len(Err[i])))+[" km"," km/s"][i//3])
+#     axes[i//3,i%3].set_xlabel('s')
+#     axes[i//3,i%3].set_ylabel(f'error in {["X (km)","Y (km)","Z (km)","VX (km/s)","VY (km/s)","VZ (km/s)"][i]}')
+#     axes[i//3,i%3].set_ylim([-.2,-.2e-3][i//3],[.2,.2e-3][i//3])
+#     axes[i//3,i%3].plot([0,Tspan],[0,0])
+    # axes[i//3,i%3].legend()
+    
+# plotting the 2 3D-errors graphs
+fig2 = plt.figure()
+axes = fig2.subplots(2,1)
+Error3D = [np.sqrt((np.array(Err[:3])**2).sum(0))*1e3,np.sqrt((np.array(Err[3:])**2).sum(0))*1e5]
+for i in range(2):
+    axes[i].plot(np.arange(0,Tspan+Tstep/2,Tstep)/3600,Error3D[i],
+                   label="RMSE = "+'{:.2f}'.format(np.sqrt((Error3D[i]**2).sum()/len(Error3D[i])))+[" m"," cm/s"][i])
+    axes[i].set_xlabel('hours')
+    axes[i].set_ylabel(f'error in {["position (m)","velocity (cm/s)"][i]}')
+    axes[i].set_ylim(0,[300,30][i])
+    axes[i].legend()
 
 # close everything and plot
 sp.kclear()

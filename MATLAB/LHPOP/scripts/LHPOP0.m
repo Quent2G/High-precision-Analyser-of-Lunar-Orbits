@@ -39,10 +39,10 @@
 
 %% SPICE LIBRARIES
     % ==================================================================================================================================================
-    addpath("mice\lib")
-    addpath("mice\src\mice")
+    addpath("mice/lib")
+    addpath("mice/src/mice")
     addpath("GUI")
-    addpath([pwd,'\prop']);
+    addpath([pwd,'/prop']);
 
     cspice_kclear;
     metakernelcheck;
@@ -76,7 +76,7 @@
     % ==================================================================================================================================================
     orb.prop.harmonics.degree   = ORBguidata{1}; % maximum degree of the harmonics
     orb.prop.harmonics.order    = ORBguidata{2}; % maximum order of the harmonics (set 0 for only zonal harmonics)
-    orb.prop.harmonics.filepath = [cd,'\input\gravity_models\Moon165x165.txt'];
+    orb.prop.harmonics.filepath = [cd,'/input/gravity_models/Moon165x165.txt'];
     % ==================================================================================================================================================
 
     % Harmonics coefficients
@@ -156,9 +156,9 @@
 %%  Propagation of the true state
     options = odeset('RelTol',1e-6,'AbsTol',1e-9);
     [orb.t,orb.XJ2000] = ode45(@prophpop,orb.epoch.span,orb.sat.X0iner,options,orb);
-    save('output\ORBdata','orb');
+    save('output/ORBdata','orb');
     ORBIT3D;
 
-    rmpath([pwd,'\prop']);
-    rmpath("mice\lib")
-    rmpath("mice\src\mice")
+    rmpath([pwd,'/prop']);
+    rmpath("mice/lib")
+    rmpath("mice/src/mice")
