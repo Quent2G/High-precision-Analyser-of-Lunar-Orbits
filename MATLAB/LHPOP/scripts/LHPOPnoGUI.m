@@ -40,25 +40,9 @@
 %% Initialisation Variables
     % ==================================================================================================================================================
     ts = cputime;
-    Precise = 2;% 0=Fast 1=Precise 2=Reference else=user's choice --> Computing power
+    Precise = 0;% 0=Reference else=user's choice --> Computing power
     
     if Precise==0
-        HarmD = 10;% maximum degree of the harmonics
-        HarmO = 10;% maximum order of the harmonics (set 0 for only zonal harmonics)
-        isS = 0;    % Do we considere the Sun as a perturbation
-        isE = 0;    % Do we considere the Earth as a perturbation
-        RC = 0;   % reflection coefficient (0 No SRP - 1 black body - 2 total reflection - 1.3 example)
-        AC = 0;     % albedo coefficient     (0 No albedo - 0.3 Earth Albedo coefficient)
-        isGR = 0;   % Do we use general relativity
-    elseif Precise==1
-        HarmD = 100;% maximum degree of the harmonics
-        HarmO = 100;% maximum order of the harmonics (set 0 for only zonal harmonics)
-        isS = 1;    % Do we considere the Sun as a perturbation
-        isE = 1;    % Do we considere the Earth as a perturbation
-        RC = 1.3;   % reflection coefficient (0 No SRP - 1 black body - 2 total reflection - 1.3 example)
-        AC = 0;     % albedo coefficient     (0 No albedo - 0.3 Earth Albedo coefficient)
-        isGR = 1;   % Do we use general relativity
-    elseif Precise==2
         HarmD = 70; % maximum degree of the harmonics
         HarmO = 70; % maximum order of the harmonics (set 0 for only zonal harmonics)
         isS = 1;    % Do we considere the Sun as a perturbation
@@ -67,12 +51,12 @@
         AC = 0;     % albedo coefficient     (0 No albedo - 0.3 Earth Albedo coefficient)
         isGR = 1;   % Do we use general relativity
     else
-        HarmD = 250;% maximum degree of the harmonics
-        HarmO = 250;% maximum order of the harmonics (set 0 for only zonal harmonics)
+        HarmD = 330;% maximum degree of the harmonics
+        HarmO = 330;% maximum order of the harmonics (set 0 for only zonal harmonics)
         isS = 1;    % Do we considere the Sun as a perturbation
         isE = 1;    % Do we considere the Earth as a perturbation
         RC = 1.3;   % reflection coefficient (0 No SRP - 1 black body - 2 total reflection - 1.3 example)
-        AC = 0;     % albedo coefficient     (0 No albedo - 0.3 Earth Albedo coefficient)
+        AC = 0.3;     % albedo coefficient     (0 No albedo - 0.3 Earth Albedo coefficient)
         isGR = 1;   % Do we use general relativity
     end
 
@@ -98,9 +82,9 @@
 
 %% SPICE LIBRARIES
     % ==================================================================================================================================================
-    addpath("mice\lib")
-    addpath("mice\src\mice")
-    addpath([pwd,'\prop']);
+    addpath("mice/lib")
+    addpath("mice/src/mice")
+    addpath([pwd,'/prop']);
 
     cspice_kclear; 
     metakernelcheck;
@@ -129,9 +113,9 @@
     % ==================================================================================================================================================
     orb.prop.harmonics.degree   = HarmD; % maximum degree of the harmonics
     orb.prop.harmonics.order    = HarmO; % maximum order of the harmonics (set 0 for only zonal harmonics)
-    % orb.prop.harmonics.filepath = [cd,'\input\gravity_models\Moon165x165.txt'];
-    orb.prop.harmonics.filepath = [cd,'\input\gravity_models\Moon_AIUB-GRL350B.txt'];
-    % orb.prop.harmonics.filepath = [cd,'\input\gravity_models\Moon_gggrx_1200a.txt'];
+    % orb.prop.harmonics.filepath = [cd,'/input/gravity_models/Moon165x165.txt'];
+    orb.prop.harmonics.filepath = [cd,'/input/gravity_models/Moon_AIUB-GRL350B.txt'];
+    % orb.prop.harmonics.filepath = [cd,'/input/gravity_models/Moon_gggrx_1200a.txt'];
     % ==================================================================================================================================================
 
     % Harmonics coefficients
@@ -198,10 +182,10 @@
 %%  Propagation of the true state
     options = odeset('RelTol',1e-7,'AbsTol',1e-9);
     [orb.t,orb.XJ2000] = ode45(@prophpop,orb.epoch.span,orb.sat.X0iner,options,orb);
-    save('output\ORBdata','orb');
+    save('output/ORBdata','orb');
     % ORBIT3D;
     disp(num2str(cputime - ts)+"s")
     
-    rmpath([pwd,'\prop']);
-    rmpath("mice\lib")
-    rmpath("mice\src\mice")
+    rmpath([pwd,'/prop']);
+    rmpath("mice/lib")
+    rmpath("mice/src/mice")

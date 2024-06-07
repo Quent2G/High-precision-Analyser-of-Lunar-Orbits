@@ -100,9 +100,9 @@
 
 %% SPICE LIBRARIES
     % ==================================================================================================================================================
-    addpath("mice\lib")
-    addpath("mice\src\mice")
-    addpath([pwd,'\prop']);
+    addpath("mice/lib")
+    addpath("mice/src/mice")
+    addpath([pwd,'/prop']);
 
     cspice_kclear; 
     metakernelcheck;
@@ -136,13 +136,13 @@
     % ==================================================================================================================================================
     orb.prop.harmonics.degree   = HarmD; % maximum degree of the harmonics
     orb.prop.harmonics.order    = HarmO; % maximum order of the harmonics (set 0 for only zonal harmonics)
-    % orb.prop.harmonics.filepath = [cd,'\input\gravity_models\Moon165x165.txt'];
-    orb.prop.harmonics.filepath = [cd,'\input\gravity_models\Moon_AIUB-GRL350B.txt'];
-    % orb.prop.harmonics.filepath = [cd,'\input\gravity_models\Moon_gggrx_1200a.txt'];
+    % orb.prop.harmonics.filepath = [cd,'/input/gravity_models/Moon165x165.txt'];
+    orb.prop.harmonics.filepath = [cd,'/input/gravity_models/Moon_AIUB-GRL350B.txt'];
+    % orb.prop.harmonics.filepath = [cd,'/input/gravity_models/Moon_gggrx_1200a.txt'];
 
     orb.prop.harmonics.degreeE   = HarmDE; % maximum degree of the harmonics
     orb.prop.harmonics.orderE    = HarmOE; % maximum order of the harmonics (set 0 for only zonal harmonics)
-    orb.prop.harmonics.filepathE = [cd,'\input\gravity_models\Earth_EGM96.txt'];
+    orb.prop.harmonics.filepathE = [cd,'/input/gravity_models/Earth_EGM96.txt'];
     % ==================================================================================================================================================
 
     % Harmonics coefficients
@@ -210,10 +210,10 @@
 %%  Propagation of the true state
     options = odeset('RelTol',1e-7,'AbsTol',1e-9);
     [orb.t,orb.XJ2000] = ode45(@prophpopTest,orb.epoch.span,orb.sat.X0iner,options,orb);
-    save('output\ORBdata','orb');
+    save('output/ORBdata','orb');
     % ORBIT3D;
     disp(num2str(cputime - ts)+"s")
     
-    rmpath([pwd,'\prop']);
-    rmpath("mice\lib")
-    rmpath("mice\src\mice")
+    rmpath([pwd,'/prop']);
+    rmpath("mice/lib")
+    rmpath("mice/src/mice")
