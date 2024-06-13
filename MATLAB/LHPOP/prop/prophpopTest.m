@@ -71,18 +71,21 @@ function [X] = prophpopTest(t,X0,model)
     REarth_iner = cspice_pxfrm2(model.frame.fromE,model.frame.to,t,t);
     R_Moon_Earth = cspice_spkezr('EARTH',t,model.frame.to,'NONE','MOON');
     R_Moon_Earth = R_Moon_Earth(1:3);
-    R_Moon_Earth_3 = norm(R_Moon_Earth)^3;
     acc_earth = accelharmonic(xJ2000-R_Moon_Earth,REarth_iner',model.prop.harmonics.degreeE,model.prop.harmonics.orderE,...
                 model.prop.harmonics.ECnm,model.prop.harmonics.ESnm,model.Earth.GM,model.Earth.RE) + ...
                 -accelharmonic(-R_Moon_Earth,REarth_iner',model.prop.harmonics.degreeE,model.prop.harmonics.orderE,...
                 model.prop.harmonics.ECnm,model.prop.harmonics.ESnm,model.Earth.GM,model.Earth.RE);
-                % -model.Earth.GM * R_Moon_Earth/R_Moon_Earth_3;
+                % -model.Earth.GM * R_Moon_Earth/norm(R_Moon_Earth)^3;
+    FP = accelharmonic(xJ2000-R_Moon_Earth,REarth_iner',model.prop.harmonics.degreeE,model.prop.harmonics.orderE,...
+                model.prop.harmonics.ECnm,model.prop.harmonics.ESnm,model.Earth.GM,model.Earth.RE);
+    RES = xJ2000-R_Moon_Earth;
+    PM = -model.Earth.GM*RES/norm(RES)^3 - model.Earth.GM*R_Moon_Earth/norm(R_Moon_Earth)^3;
     % ---------------------------------------------------------------------------------------------------------- %   
     
     % acceleration due to the general relativity
     % ---------------------------------------------------------------------------------------------------------- %    
     gamma = 1; beta = 1; c = model.const.c;
-    acc_genRel = model.sat.rel.*model.centralPlanet.GM/(c^2*norm(xJ2000)^3)*((2*(beta+gamma)*model.centralPlanet.GM-...
+    acc_genRel = model.sat.rel.*model.centralPlanet.GM/(c^2*norm(xJ2000)^3)*((2*(beta+gamma)*model.centralPlanet.GM/norm(xJ2000)-...
         gamma*norm(vJ2000)^2).*xJ2000+2*(1+gamma)*xJ2000'*vJ2000.*vJ2000);
     
 

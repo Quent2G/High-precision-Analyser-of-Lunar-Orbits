@@ -47,11 +47,11 @@
 %
 % See also accelpntmasses accelharmonic accelsrp accelalb
 %
-function [X] = prophpop(t,X0,model)
+function [X] = prophpopInteg(t,X0,model)
     
     % state in J2000 reference system centred at the central planet
-    xJ2000 = X0(1:3);
-    vJ2000 = X0(4:6);
+    xJ2000 = X0(1:3,1);
+    % vJ2000 = X0(4:6,1);
     
     % acceleration due to the attraction of other planets
     % ---------------------------------------------------------------------------------------------------------- %    
@@ -68,9 +68,9 @@ function [X] = prophpop(t,X0,model)
     
     % acceleration due to the general relativity
     % ---------------------------------------------------------------------------------------------------------- %    
-    gamma = 1; beta = 1; c = model.const.c;
-    acc_genRel = model.sat.rel.*model.centralPlanet.GM/(c^2*norm(xJ2000)^3)*((2*(beta+gamma)*model.centralPlanet.GM/norm(xJ2000)-...
-        gamma*norm(vJ2000)^2).*xJ2000+2*(1+gamma)*xJ2000'*vJ2000.*vJ2000);
+    % gamma = 1; beta = 1; c = model.const.c;
+    % acc_genRel = model.sat.rel.*model.centralPlanet.GM/(c^2*norm(xJ2000)^3)*((2*(beta+gamma)*model.centralPlanet.GM/norm(xJ2000)-...
+    %     gamma*norm(vJ2000)^2).*xJ2000+2*(1+gamma)*xJ2000'*vJ2000.*vJ2000);
     
 
     % acceleration due to the solar radiation pressure of Sun
@@ -85,13 +85,14 @@ function [X] = prophpop(t,X0,model)
 
     % equations of motion
     % ---------------------------------------------------------------------------------------------------------- %
-    xdot   = vJ2000;
-    vdot   = acc_centralPlanet + acc_pointMasses + acc_SRPSun + acc_alb + acc_genRel;
+    % xdot   = vJ2000;
+    vdot   = acc_centralPlanet + acc_pointMasses + acc_SRPSun + acc_alb;% + acc_genRel;
     % ---------------------------------------------------------------------------------------------------------- %
 
     % output
     % ---------------------------------------------------------------------------------------------------------- %
-    X = [xdot;vdot];
+    % X = [xdot;vdot];
+    X = vdot;
     % ---------------------------------------------------------------------------------------------------------- %   
     
     if isfield(model,'wb')

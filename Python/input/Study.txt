@@ -1,9 +1,12 @@
-Title: Study of Geopotential order on Accuracy
-XLabel: Order
-YLabel: X-RMSE (km)
+Title: Study of RelTol(79) on Accuracy
+XLabel: RelTol (e-7)
+YLabel: Position-RMSE (m)
 
 Data: "Xdata Ydata"
-70 1.96e-1 4.19
-150 1.06e-1 10.4
-250 5.35e-2 20.5
-350 4.51e-2 37.6
+10 1235
+1.1 138
+1.01 128
+1 153
+0.99 240
+0.9 260
+0.1 255

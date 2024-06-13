@@ -180,12 +180,14 @@
     % =========================================================================% 
 
 %%  Propagation of the true state
-    options = odeset('RelTol',1e-7,'AbsTol',1e-12);
-    [orb.t,orb.XJ2000] = ode78(@prophpop,orb.epoch.span,orb.sat.X0iner,options,orb);
+    addpath('tools')
+    % options = odeset('RelTol',1e-7,'AbsTol',1e-12);
+    [orb.XJ2000] = ShampineGordon(@prophpop,orb.epoch.et(1),orb.epoch.et(2),1e-5,1e-12,6,orb.sat.X0iner',orb);
     save('output/ORBdata','orb');
     % ORBIT3D;
     disp(num2str(cputime - ts)+"s")
     
+    rmpath('tools')
     rmpath([pwd,'/prop']);
     rmpath("mice/lib")
     rmpath("mice/src/mice")
