@@ -76,7 +76,10 @@ function [X] = prophpopTest(t,X0,model)
                 -accelharmonic(-R_Moon_Earth,REarth_iner',model.prop.harmonics.degreeE,model.prop.harmonics.orderE,...
                 model.prop.harmonics.ECnm,model.prop.harmonics.ESnm,model.Earth.GM,model.Earth.RE);
                 % -model.Earth.GM * R_Moon_Earth/norm(R_Moon_Earth)^3;
-    disp(-model.Earth.GM * R_Moon_Earth/norm(R_Moon_Earth)^3)
+    FP = accelharmonic(xJ2000-R_Moon_Earth,REarth_iner',model.prop.harmonics.degreeE,model.prop.harmonics.orderE,...
+                model.prop.harmonics.ECnm,model.prop.harmonics.ESnm,model.Earth.GM,model.Earth.RE);
+    RES = xJ2000-R_Moon_Earth;
+    PM = -model.Earth.GM*RES/norm(RES)^3 - model.Earth.GM*R_Moon_Earth/norm(R_Moon_Earth)^3;
     % ---------------------------------------------------------------------------------------------------------- %   
     
     % acceleration due to the general relativity

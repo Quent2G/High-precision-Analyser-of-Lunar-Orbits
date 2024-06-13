@@ -40,7 +40,7 @@
 %% Initialisation Variables
     % ==================================================================================================================================================
     ts = cputime;
-    Precise = 2;% 0=Fast 1=Precise 2=Reference else=user's choice --> Computing power
+    Precise = 0;% 0=Fast 1=Precise 2=Reference else=user's choice --> Computing power
     
     if Precise==0
         HarmD = 70; % maximum degree of the harmonics
@@ -126,7 +126,7 @@
 
     orb.prop.harmonics.degreeE   = HarmDE; % maximum degree of the harmonics
     orb.prop.harmonics.orderE    = HarmOE; % maximum order of the harmonics (set 0 for only zonal harmonics)
-    orb.prop.harmonics.filepathE = [cd,'/input/gravity_models/Earth_EGM96.txt'];
+    orb.prop.harmonics.filepathE = [cd,'/input/gravity_models/Earth_C-EGM2008.txt'];
     % ==================================================================================================================================================
 
     % Harmonics coefficients

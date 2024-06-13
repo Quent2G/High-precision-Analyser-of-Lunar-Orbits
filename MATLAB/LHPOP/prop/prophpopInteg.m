@@ -47,13 +47,13 @@
 %
 % See also accelpntmasses accelharmonic accelsrp accelalb
 %
-function [X] = prophpopTest(t,X0,model)
+function [X] = prophpopInteg(t,X0,model)
     
     % state in J2000 reference system centred at the central planet
     xJ2000 = X0(1:3,1);
-    vJ2000 = X0(4:6,1);
+    % vJ2000 = X0(4:6,1);
     
-    % acceleration due to the attraction of the Sun
+    % acceleration due to the attraction of other planets
     % ---------------------------------------------------------------------------------------------------------- %    
     acc_pointMasses = accelpntmasses(xJ2000,model.pointMasses.stringName,model.pointMasses.GM,...    
         t,model.frame.integr,model.centralPlanet.stringName);
@@ -65,25 +65,12 @@ function [X] = prophpopTest(t,X0,model)
     acc_centralPlanet = accelharmonic(xJ2000,Rgeog_iner',model.prop.harmonics.degree,model.prop.harmonics.order,...
         model.prop.harmonics.Cnm,model.prop.harmonics.Snm,model.centralPlanet.GM,model.centralPlanet.RE);
     % ---------------------------------------------------------------------------------------------------------- %   
-
-    % acceleration due to the Earth gravity field
-    % ---------------------------------------------------------------------------------------------------------- %
-    REarth_iner = cspice_pxfrm2(model.frame.fromE,model.frame.to,t,t);
-    R_Moon_Earth = cspice_spkezr('EARTH',t,model.frame.to,'NONE','MOON');
-    R_Moon_Earth = R_Moon_Earth(1:3);
-    acc_earth = accelharmonic(xJ2000-R_Moon_Earth,REarth_iner',model.prop.harmonics.degreeE,model.prop.harmonics.orderE,...
-                model.prop.harmonics.ECnm,model.prop.harmonics.ESnm,model.Earth.GM,model.Earth.RE) + ...
-                -accelharmonic(-R_Moon_Earth,REarth_iner',model.prop.harmonics.degreeE,model.prop.harmonics.orderE,...
-                model.prop.harmonics.ECnm,model.prop.harmonics.ESnm,model.Earth.GM,model.Earth.RE);
-                % -model.Earth.GM * R_Moon_Earth/norm(R_Moon_Earth)^3;
-    disp(-model.Earth.GM * R_Moon_Earth/norm(R_Moon_Earth)^3)
-    % ---------------------------------------------------------------------------------------------------------- %   
     
     % acceleration due to the general relativity
     % ---------------------------------------------------------------------------------------------------------- %    
-    gamma = 1; beta = 1; c = model.const.c;
-    acc_genRel = model.sat.rel.*model.centralPlanet.GM/(c^2*norm(xJ2000)^3)*((2*(beta+gamma)*model.centralPlanet.GM-...
-        gamma*norm(vJ2000)^2).*xJ2000+2*(1+gamma)*xJ2000'*vJ2000.*vJ2000);
+    % gamma = 1; beta = 1; c = model.const.c;
+    % acc_genRel = model.sat.rel.*model.centralPlanet.GM/(c^2*norm(xJ2000)^3)*((2*(beta+gamma)*model.centralPlanet.GM-...
+    %     gamma*norm(vJ2000)^2).*xJ2000+2*(1+gamma)*xJ2000'*vJ2000.*vJ2000);
     
 
     % acceleration due to the solar radiation pressure of Sun
@@ -98,13 +85,14 @@ function [X] = prophpopTest(t,X0,model)
 
     % equations of motion
     % ---------------------------------------------------------------------------------------------------------- %
-    xdot   = vJ2000;
-    vdot   = acc_centralPlanet + acc_earth + acc_pointMasses + acc_SRPSun + acc_alb + acc_genRel;
+    % xdot   = vJ2000;
+    vdot   = acc_centralPlanet + acc_pointMasses + acc_SRPSun + acc_alb;% + acc_genRel;
     % ---------------------------------------------------------------------------------------------------------- %
 
     % output
     % ---------------------------------------------------------------------------------------------------------- %
-    X = [xdot;vdot];
+    % X = [xdot;vdot];
+    X = vdot;
     % ---------------------------------------------------------------------------------------------------------- %   
     
     if isfield(model,'wb')
