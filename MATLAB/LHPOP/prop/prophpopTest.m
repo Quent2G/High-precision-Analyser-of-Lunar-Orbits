@@ -85,7 +85,7 @@ function [X] = prophpopTest(t,X0,model)
     % acceleration due to the general relativity
     % ---------------------------------------------------------------------------------------------------------- %    
     gamma = 1; beta = 1; c = model.const.c;
-    acc_genRel = model.sat.rel.*model.centralPlanet.GM/(c^2*norm(xJ2000)^3)*((2*(beta+gamma)*model.centralPlanet.GM-...
+    acc_genRel = model.sat.rel.*model.centralPlanet.GM/(c^2*norm(xJ2000)^3)*((2*(beta+gamma)*model.centralPlanet.GM/norm(xJ2000)-...
         gamma*norm(vJ2000)^2).*xJ2000+2*(1+gamma)*xJ2000'*vJ2000.*vJ2000);
     
 
