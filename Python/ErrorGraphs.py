@@ -8,6 +8,7 @@ from tqdm import tqdm
 
 mat = read_mat('../MATLAB/LHPOP/output/ORBdata.mat')
 XJ2000 = mat["orb"]["XJ2000"]
+T = mat["orb"]["t"]
 XDF = pd.DataFrame(XJ2000,columns = ["X","Y","Z","VX","VY","VZ"])
 sp.furnsh("input/LRO_ES_90_202003_GRGM900C_L600.bsp")
 sp.furnsh("input/naif0012.tls")
@@ -55,8 +56,8 @@ Tspan = stop-start
 Err = []
 for _ in range(6):Err.append([])
 
-for i in tqdm(range(round(Tspan/Tstep)+1)):
-    Time = start + Tstep*i
+for i in tqdm(range(len(XJ2000))):
+    Time = T[i]
     state = sp.spkezr("LRO",Time,"J2000","NONE","MOON")[0]
     for j in range(6):
         Err[j].append(state[j]-XJ2000[i,j])
@@ -78,7 +79,7 @@ fig2 = plt.figure()
 axes = fig2.subplots(2,1)
 Error3D = [np.sqrt((np.array(Err[:3])**2).sum(0))*1e3,np.sqrt((np.array(Err[3:])**2).sum(0))*1e5]
 for i in range(2):
-    axes[i].plot(np.arange(0,Tspan+Tstep/2,Tstep)/3600,Error3D[i],
+    axes[i].plot((T-T[0])/3600,Error3D[i],
                    label="RMSE = "+'{:.2f}'.format(np.sqrt((Error3D[i]**2).sum()/len(Error3D[i])))+[" m"," cm/s"][i])
     axes[i].set_xlabel('hours')
     axes[i].set_ylabel(f'error in {["position (m)","velocity (cm/s)"][i]}')

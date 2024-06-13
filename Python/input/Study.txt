@@ -1,16 +1,12 @@
 Title: Study of RelTol(79) on Accuracy
-XLabel: RelTol (e-9)
+XLabel: RelTol (e-7)
 YLabel: Position-RMSE (m)
 
 Data: "Xdata Ydata"
-1e5 910
-10010 269
-10001 72
-10000.5 440
-1e4 111
-9999 333
-9990 242
-1000 251
-100 251
-10 253
-1 253
+10 1235
+1.1 138
+1.01 128
+1 153
+0.99 240
+0.9 260
+0.1 255
