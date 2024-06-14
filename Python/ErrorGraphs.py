@@ -15,38 +15,38 @@ sp.furnsh("input/naif0012.tls")
 start,stop = mat['orb']['epoch']['et']
 
 ### plot moon and traj
-# fig1 = plt.figure()
-# ax = plt.axes(projection='3d')
+fig1 = plt.figure()
+ax = plt.axes(projection='3d')
 
-# #plot moon
-# rM = 1738
-# u = np.linspace(0, 2 * np.pi, 50)
-# v = np.linspace(0, np.pi, 50)
-# x = rM * np.outer(np.cos(u), np.sin(v))
-# y = rM * np.outer(np.sin(u), np.sin(v))
-# z = rM * np.outer(np.ones(np.size(u)), np.cos(v))
-# ax.plot_surface(x, y, z,cmap = "gray",zorder=1)
-# ax.set_aspect('equal')
+#plot moon
+rM = 1738
+u = np.linspace(0, 2 * np.pi, 50)
+v = np.linspace(0, np.pi, 50)
+x = rM * np.outer(np.cos(u), np.sin(v))
+y = rM * np.outer(np.sin(u), np.sin(v))
+z = rM * np.outer(np.ones(np.size(u)), np.cos(v))
+ax.plot_surface(x, y, z,cmap = "gray",zorder=1)
+ax.set_aspect('equal')
 
-# #plot traj
-# l=None
-# ax.plot(XJ2000[:l,0],XJ2000[:l,1],XJ2000[:l,2],"r",zorder=10,label="traj all")
-# ax.set_xlabel('X (km)')
-# ax.set_ylabel('Y (km)')
-# ax.set_zlabel('Z (km)')
+#plot traj
+l=None
+ax.plot(XJ2000[:l,0],XJ2000[:l,1],XJ2000[:l,2],"r",zorder=10,label="traj all")
+ax.set_xlabel('X (km)')
+ax.set_ylabel('Y (km)')
+ax.set_zlabel('Z (km)')
 
-# # Plot initial position
-# state = sp.spkezr("LRO",start,"J2000","NONE","MOON")[0]
-# ax.plot(state[0],state[1],state[2],"b.",zorder=10,label="Initial pos")        #Starting point
+# Plot initial position
+state = sp.spkezr("LRO",start,"J2000","NONE","MOON")[0]
+ax.plot(state[0],state[1],state[2],"b.",zorder=10,label="Initial pos")        #Starting point
 
-# # Plot final position
-# state = sp.spkezr("LRO",stop,"J2000","NONE","MOON")[0]
-# ax.plot(state[0],state[1],state[2],"c.",zorder=10,label="Final Pos True")        #Ending point True
+# Plot final position
+state = sp.spkezr("LRO",stop,"J2000","NONE","MOON")[0]
+ax.plot(state[0],state[1],state[2],"c.",zorder=10,label="Final Pos True")        #Ending point True
 
-# # Plot final position Precise Prop
-# EndP = XJ2000[-1]
-# ax.plot(EndP[0],EndP[1],EndP[2],"y.",zorder=10,label="Final Pos All")        #Starting point All
-# ax.legend()
+# Plot final position Precise Prop
+EndP = XJ2000[-1]
+ax.plot(EndP[0],EndP[1],EndP[2],"y.",zorder=10,label="Final Pos All")        #Starting point All
+ax.legend()
 ###
 
 ### Second graph
