@@ -7,7 +7,7 @@ The purpose of this project is to improve an existing lunar orbit propagator in 
 After copying the project on your local machine (git clone [url]), you have to:  
   1) Download the mice folder depending on your machine OS at this link : [mice](https://naif.jpl.nasa.gov/naif/toolkit_MATLAB.html)  
 Place the mice folder directly in the LHPOP folder  
-  2) Download the de430.bsp ephemeris at https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/planets/  
+  2) Download the de430.bsp ephemeris at [NAIF de430](https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/planets/)  
 Place it in MATLAB/LHPOP/ker  
   
 Attention for Mac users with a mac processor (no problem with Intel processors), you may need to recompile the mexfile following these instructions:  
