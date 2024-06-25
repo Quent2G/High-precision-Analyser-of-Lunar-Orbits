@@ -40,7 +40,8 @@
 %% Initialisation Variables
     % ==================================================================================================================================================
     ts = cputime;
-    Precise = 0;% 0=Fast 1=Precise 2=Reference else=user's choice --> Computing power
+    Precise = 2;% 0=Reference else=user's choice --> Computing power
+                % 1=NRHO 1 period
     
     if Precise==0
         HarmD = 70; % maximum degree of the harmonics
@@ -50,37 +51,80 @@
         RC = 1.3;   % reflection coefficient (0 No SRP - 1 black body - 2 total reflection - 1.3 example)
         AC = 0.3;     % albedo coefficient     (0 No albedo - 0.3 Earth Albedo coefficient)
         isGR = 1;   % Do we use general relativity
-    else
-        HarmD = 330;% maximum degree of the harmonics
-        HarmO = 330;% maximum order of the harmonics (set 0 for only zonal harmonics)
+        Asat = 2;   % satellite area perpendicular to sun direction [m^2]
+        msat = 1E3; % satellite mass [kg]
+        TStart = '2020 Feb 01 00:00:00.000';  % start time [yyyy month dd hh:mm:ss.---]
+        TStop =  '2020 Feb 02 00:00:00.000';  % stop time [yyyy month dd hh:mm:ss.---]
+        TStep = 30; % Time step [s]
+        RefS = 'J2000';   % Reference System (J2000/MOON_ME)
+        CoordT = 'Cartesian'; %Coordinates Type (Cartesian/Keplerian)
+        X = 8.20151464e+02; % Semi Major Axis
+        Y = 1.09123677e+03;    % Eccentricity
+        Z = 1.26278945e+03;    % Inclination
+        VX = 2.24588615e-01;    % Longitude of Ascending Node
+        VY = 1.11772284e+00;    % Argument of Periapsis
+        VZ  = -1.13910385e+00;    % Mean Anomaly
+        SMA = 1800; % Semi Major Axis
+        ECC = 0;    % Eccentricity
+        INC = 0;    % Inclination
+        LAN = 0;    % Longitude of Ascending Node
+        AOP = 0;    % Argument of Periapsis
+        MA  = 0;    % Mean Anomaly
+    elseif Precise == 1
+        HarmD = 70;% maximum degree of the harmonics
+        HarmO = 70;% maximum order of the harmonics (set 0 for only zonal harmonics)
         isS = 1;    % Do we considere the Sun as a perturbation
         isE = 1;    % Do we considere the Earth as a perturbation
         RC = 1.3;   % reflection coefficient (0 No SRP - 1 black body - 2 total reflection - 1.3 example)
         AC = 0.3;     % albedo coefficient     (0 No albedo - 0.3 Earth Albedo coefficient)
         isGR = 1;   % Do we use general relativity
+        Asat = 2;   % satellite area perpendicular to sun direction [m^2]
+        msat = 1E3; % satellite mass [kg]
+        TStart = '2022 Nov 26 00:00:00.000';  % start time [yyyy month dd hh:mm:ss.---]
+        TStop =  '2022 Dec 2 12:00:00.000';  % stop time [yyyy month dd hh:mm:ss.---]
+        TStep = 30; % Time step [s]
+        RefS = 'J2000';   % Reference System (J2000/MOON_ME)
+        CoordT = 'Cartesian'; %Coordinates Type (Cartesian/Keplerian)
+        X = -4103.547489327654; % Semi Major Axis
+        Y = 20820.76103083731;    % Eccentricity
+        Z = -68714.1843688717;    % Inclination
+        VX = -0.0641922245925115;    % Longitude of Ascending Node
+        VY = -0.004286985491924689;    % Argument of Periapsis
+        VZ  = 0.0022994082206247227;    % Mean Anomaly
+        SMA = 1800; % Semi Major Axis
+        ECC = 0;    % Eccentricity
+        INC = 0;    % Inclination
+        LAN = 0;    % Longitude of Ascending Node
+        AOP = 0;    % Argument of Periapsis
+        MA  = 0;    % Mean Anomaly
+    else
+        HarmD = 70;% maximum degree of the harmonics
+        HarmO = 70;% maximum order of the harmonics (set 0 for only zonal harmonics)
+        isS = 1;    % Do we considere the Sun as a perturbation
+        isE = 1;    % Do we considere the Earth as a perturbation
+        RC = 1.3;   % reflection coefficient (0 No SRP - 1 black body - 2 total reflection - 1.3 example)
+        AC = 0.3;     % albedo coefficient     (0 No albedo - 0.3 Earth Albedo coefficient)
+        isGR = 1;   % Do we use general relativity
+        Asat = 2;   % satellite area perpendicular to sun direction [m^2]
+        msat = 1E3; % satellite mass [kg]
+        TStart = '2022 Nov 26 00:00:00.000';  % start time [yyyy month dd hh:mm:ss.---]
+        TStop =  '2022 Dec 2 12:00:00.000';  % stop time [yyyy month dd hh:mm:ss.---]
+        TStep = 30; % Time step [s]
+        RefS = 'J2000';   % Reference System (J2000/MOON_ME)
+        CoordT = 'Cartesian'; %Coordinates Type (Cartesian/Keplerian)
+        X = -4103.547489327654; % Semi Major Axis
+        Y = 20820.76103083731;    % Eccentricity
+        Z = -68714.1843688717;    % Inclination
+        VX = -0.0641922245925115;    % Longitude of Ascending Node
+        VY = -0.004286985491924689;    % Argument of Periapsis
+        VZ  = 0.0022994082206247227;    % Mean Anomaly
+        SMA = 1800; % Semi Major Axis
+        ECC = 0;    % Eccentricity
+        INC = 0;    % Inclination
+        LAN = 0;    % Longitude of Ascending Node
+        AOP = 0;    % Argument of Periapsis
+        MA  = 0;    % Mean Anomaly
     end
-
-    HarmDE = 3; % maximum degree of the harmonics for Earth
-    HarmOE = 3; % maximum order of the harmonics (set 0 for only zonal harmonics) for Earth
-    Asat = 2;   % satellite area perpendicular to sun direction [m^2]
-    msat = 1E3; % satellite mass [kg]
-    TStart = '2020 Feb 01 00:00:00.000';  % start time [yyyy month dd hh:mm:ss.---]
-    TStop =  '2020 Feb 02 00:00:00.000';  % stop time [yyyy month dd hh:mm:ss.---]
-    TStep = 30; % Time step [s]
-    RefS = 'J2000';   % Reference System (J2000/MOON_ME)
-    CoordT = 'Cartesian'; %Coordinates Type (Cartesian/Keplerian)
-    X = 8.20151464e+02; % Semi Major Axis
-    Y = 1.09123677e+03;    % Eccentricity
-    Z = 1.26278945e+03;    % Inclination
-    VX = 2.24588615e-01;    % Longitude of Ascending Node
-    VY = 1.11772284e+00;    % Argument of Periapsis
-    VZ  = -1.13910385e+00;    % Mean Anomaly
-    SMA = 1800; % Semi Major Axis
-    ECC = 0;    % Eccentricity
-    INC = 0;    % Inclination
-    LAN = 0;    % Longitude of Ascending Node
-    AOP = 0;    % Argument of Periapsis
-    MA  = 0;    % Mean Anomaly
 
 %% SPICE LIBRARIES
     % ==================================================================================================================================================
@@ -91,27 +135,22 @@
     cspice_kclear; 
     metakernelcheck;
     cspice_furnsh('metakernel.tm');
-    
+
 %% FORCE MODEL
     % ==================================================================================================================================================
     orb.frame.integr = 'J2000';   % integration frame (inertial)
     orb.frame.from   = 'MOON_ME'; % frame where the gravity potential is defined
-    orb.frame.fromE   = 'IAU_EARTH'; % frame where the gravity potential is defined
     orb.frame.to     = orb.frame.integr;
     orb.centralPlanet.stringName = 'Moon';
-    orb.Earth.stringName = 'Earth';
-    orb.pointMasses.stringName   = {'Sun'};
+    orb.pointMasses.stringName   = {'Sun','Earth'};
     % Physical Constants
     orb.const.G           = 6.67428e-20;   % Universal gravitational constant                      [km^3 kg^-1 s^-2]
-    % Moon
+    % Central Planet
     orb.centralPlanet.RE  = 1737.74;       % Radius of the Moon                                  [km]
-    orb.centralPlanet.GM  = 4902.7926024;  % Gravitational parameter of the Moon                   [km^3 s^-2]
-    % Earth
-    orb.Earth.RE  = 6371.00;               % Radius of the Earth                                  [km]
-    orb.Earth.M  = 5.97218639e24*isE;        % Mass of the Earth                                      [kg]
-    orb.Earth.GM  = orb.const.G.*orb.Earth.M;          % Gravitational parameter of the Earth                   [km^3 s^-2]
-    % Point Masse : Sun
+    orb.centralPlanet.GM  = 4902.7926024;          % Gravitational parameter of the Moon                   [km^3 s^-2]
+    % Point Masses
     orb.pointMasses.M(1)  = 1.9884e30*isS;             % Mass of the Sun                                       [kg]
+    orb.pointMasses.M(2)  = 5.97218639e24*isE;        % Mass of the Earth                                      [kg]
     orb.pointMasses.GM    = orb.const.G.*orb.pointMasses.M;        % Gravitational parameter of the Third Bodies           [km^3 s^-2]
     % ==================================================================================================================================================
     orb.pointMasses.numb = length(orb.pointMasses.M);
@@ -123,15 +162,10 @@
     % orb.prop.harmonics.filepath = [cd,'/input/gravity_models/Moon165x165.txt'];
     orb.prop.harmonics.filepath = [cd,'/input/gravity_models/Moon_AIUB-GRL350B.txt'];
     % orb.prop.harmonics.filepath = [cd,'/input/gravity_models/Moon_gggrx_1200a.txt'];
-
-    orb.prop.harmonics.degreeE   = HarmDE; % maximum degree of the harmonics
-    orb.prop.harmonics.orderE    = HarmOE; % maximum order of the harmonics (set 0 for only zonal harmonics)
-    orb.prop.harmonics.filepathE = [cd,'/input/gravity_models/Earth_C-EGM2008.txt'];
     % ==================================================================================================================================================
 
     % Harmonics coefficients
     [orb.prop.harmonics.Cnm,orb.prop.harmonics.Snm] = normalizedharmonics(orb.prop.harmonics.filepath,orb.prop.harmonics.degree);
-    [orb.prop.harmonics.ECnm,orb.prop.harmonics.ESnm] = normalizedharmonics(orb.prop.harmonics.filepathE,orb.prop.harmonics.degreeE);
 
 %% Solar Radiation Pressure and Earth Albedo
     % ==================================================================================================================================================
@@ -190,10 +224,10 @@
         end
     end
     % =========================================================================% 
-  
+
 %%  Propagation of the true state
     options = odeset('RelTol',1e-7,'AbsTol',1e-12);
-    [orb.t,orb.XJ2000] = ode45(@prophpopEGF,orb.epoch.span,orb.sat.X0iner,options,orb);
+    [orb.t,orb.XJ2000] = ode45(@prophpop,orb.epoch.span,orb.sat.X0iner,options,orb);
     save('output/ORBdata','orb');
     % ORBIT3D;
     disp(num2str(cputime - ts)+"s")

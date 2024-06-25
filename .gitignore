@@ -1,3 +1,4 @@
 **/.DS_Store
 MATLAB/LHPOP/mice
-MATLAB/LHPOP/ker/de430.bsp
+MATLAB/LHPOP/ker/de*.bsp
+Python/input/de*.bsp
