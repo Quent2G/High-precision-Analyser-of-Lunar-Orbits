@@ -47,7 +47,7 @@
 %
 % See also accelpntmasses accelharmonic accelsrp accelalb
 %
-function [X] = prophpopTest(t,X0,model)
+function [X] = prophpopEGF(t,X0,model)
     
     % state in J2000 reference system centred at the central planet
     xJ2000 = X0(1:3,1);
