@@ -40,12 +40,15 @@
 %% Initialisation Variables
     % ==================================================================================================================================================
     ts = cputime;
-    Precise = 2;% 0=Reference else=user's choice --> Computing power
-                % 1=NRHO 1 period
+    Precise = 0; % 0    = LRO LLO
+                 % 1    = NRHO 1 period
+                 % else = user's choice
     
     if Precise==0
         HarmD = 70; % maximum degree of the harmonics
         HarmO = 70; % maximum order of the harmonics (set 0 for only zonal harmonics)
+        HarmDE = 3; % maximum degree of the Earth harmonics
+        HarmOE = 3; % maximum order of the Earth harmonics (set 0 for only zonal harmonics)
         isS = 1;    % Do we considere the Sun as a perturbation
         isE = 1;    % Do we considere the Earth as a perturbation
         RC = 1.3;   % reflection coefficient (0 No SRP - 1 black body - 2 total reflection - 1.3 example)
@@ -73,6 +76,8 @@
     elseif Precise == 1
         HarmD = 70;% maximum degree of the harmonics
         HarmO = 70;% maximum order of the harmonics (set 0 for only zonal harmonics)
+        HarmDE = 0; % maximum degree of the Earth harmonics
+        HarmOE = 0; % maximum order of the Earth harmonics (set 0 for only zonal harmonics)
         isS = 1;    % Do we considere the Sun as a perturbation
         isE = 1;    % Do we considere the Earth as a perturbation
         RC = 1.3;   % reflection coefficient (0 No SRP - 1 black body - 2 total reflection - 1.3 example)
@@ -100,6 +105,8 @@
     else
         HarmD = 70;% maximum degree of the harmonics
         HarmO = 70;% maximum order of the harmonics (set 0 for only zonal harmonics)
+        HarmDE = 0; % maximum degree of the Earth harmonics
+        HarmOE = 0; % maximum order of the Earth harmonics (set 0 for only zonal harmonics)
         isS = 1;    % Do we considere the Sun as a perturbation
         isE = 1;    % Do we considere the Earth as a perturbation
         RC = 1.3;   % reflection coefficient (0 No SRP - 1 black body - 2 total reflection - 1.3 example)
@@ -140,17 +147,22 @@
     % ==================================================================================================================================================
     orb.frame.integr = 'J2000';   % integration frame (inertial)
     orb.frame.from   = 'MOON_ME'; % frame where the gravity potential is defined
+    orb.frame.fromE   = 'IAU_EARTH'; % frame where the gravity potential is defined
     orb.frame.to     = orb.frame.integr;
     orb.centralPlanet.stringName = 'Moon';
-    orb.pointMasses.stringName   = {'Sun','Earth'};
+    orb.Earth.stringName = 'Earth';
+    orb.pointMasses.stringName   = {'Sun'};
     % Physical Constants
     orb.const.G           = 6.67428e-20;   % Universal gravitational constant                      [km^3 kg^-1 s^-2]
-    % Central Planet
+    % Moon
     orb.centralPlanet.RE  = 1737.74;       % Radius of the Moon                                  [km]
-    orb.centralPlanet.GM  = 4902.7926024;          % Gravitational parameter of the Moon                   [km^3 s^-2]
-    % Point Masses
+    orb.centralPlanet.GM  = 4902.7926024;  % Gravitational parameter of the Moon                   [km^3 s^-2]
+    % Earth
+    orb.Earth.RE  = 6371.00;               % Radius of the Earth                                  [km]
+    orb.Earth.M  = 5.97218639e24*isE;        % Mass of the Earth                                      [kg]
+    orb.Earth.GM  = orb.const.G.*orb.Earth.M;          % Gravitational parameter of the Earth                   [km^3 s^-2]
+    % Point Masse : Sun
     orb.pointMasses.M(1)  = 1.9884e30*isS;             % Mass of the Sun                                       [kg]
-    orb.pointMasses.M(2)  = 5.97218639e24*isE;        % Mass of the Earth                                      [kg]
     orb.pointMasses.GM    = orb.const.G.*orb.pointMasses.M;        % Gravitational parameter of the Third Bodies           [km^3 s^-2]
     % ==================================================================================================================================================
     orb.pointMasses.numb = length(orb.pointMasses.M);
@@ -162,10 +174,15 @@
     % orb.prop.harmonics.filepath = [cd,'/input/gravity_models/Moon165x165.txt'];
     orb.prop.harmonics.filepath = [cd,'/input/gravity_models/Moon_AIUB-GRL350B.txt'];
     % orb.prop.harmonics.filepath = [cd,'/input/gravity_models/Moon_gggrx_1200a.txt'];
+
+    orb.prop.harmonics.degreeE   = HarmDE; % maximum degree of the harmonics
+    orb.prop.harmonics.orderE    = HarmOE; % maximum order of the harmonics (set 0 for only zonal harmonics)
+    orb.prop.harmonics.filepathE = [cd,'/input/gravity_models/Earth_C-EGM2008.txt'];
     % ==================================================================================================================================================
 
     % Harmonics coefficients
     [orb.prop.harmonics.Cnm,orb.prop.harmonics.Snm] = normalizedharmonics(orb.prop.harmonics.filepath,orb.prop.harmonics.degree);
+    [orb.prop.harmonics.ECnm,orb.prop.harmonics.ESnm] = normalizedharmonics(orb.prop.harmonics.filepathE,orb.prop.harmonics.degreeE);
 
 %% Solar Radiation Pressure and Earth Albedo
     % ==================================================================================================================================================
@@ -227,7 +244,7 @@
 
 %%  Propagation of the true state
     options = odeset('RelTol',1e-7,'AbsTol',1e-12);
-    [orb.t,orb.XJ2000] = ode45(@prophpop,orb.epoch.span,orb.sat.X0iner,options,orb);
+    [orb.t,orb.XJ2000] = ode45(@prophpopEGF,orb.epoch.span,orb.sat.X0iner,options,orb);
     save('output/ORBdata','orb');
     % ORBIT3D;
     disp(num2str(cputime - ts)+"s")
