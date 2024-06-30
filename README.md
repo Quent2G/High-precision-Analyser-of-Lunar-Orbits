@@ -18,8 +18,8 @@ Attention for Mac users with a Mac processor (no problem with Intel processors),
 
 1. Download the files mice.tar.Z and importMice.csh from NAIF(https://naif.jpl.nasa.gov/naif/toolkit_MATLAB_MacIntel_OSX_AppleC_MATLAB9.x_64bit.html) into a directory, such as Build;
 2. Open the Build directory in Matlab, and in the Matlab Command Window, run:
-   a. system('/bin/csh -f importMice.csh'), followed by,  
-   b. system('/bin/csh -f makeall.csh');
+   - a. system('/bin/csh -f importMice.csh'), followed by,
+   - b. system('/bin/csh -f makeall.csh');
 3. A new mex file mice.mexmaci64 should be generated in the lib sub directory;
 4. Copy the whole mice directory to your project directory.
 
