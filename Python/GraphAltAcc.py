@@ -9,7 +9,7 @@ Acc = dict()
 
 n=len(Lines)//7
 for i in range(n):
-    alt=int(Lines[7*i].strip().split()[1])
+    alt=float(Lines[7*i].strip().split()[1])
     Acc[alt]=[]
     for j in range(6):
         data = Lines[7*i+j+1].strip().split()
