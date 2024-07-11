@@ -34,7 +34,7 @@
 %
 function [acc_pointMasses] = accelpntmassesGraph(r,pointMasses,GM,t,frame,centralPlanet,model) %#ok<INUSL>
 
-    global TextAlt;
+    global TextAcc;
     acc_pointMasses = zeros(3,1);
     for j = 1:size(pointMasses,2)
         temp = cspice_spkezr(pointMasses{j},t,frame,'NONE',centralPlanet); %#ok<NASGU>
@@ -45,8 +45,8 @@ function [acc_pointMasses] = accelpntmassesGraph(r,pointMasses,GM,t,frame,centra
         eval(['r',jstr,'S_3 = norm(r',jstr,'S)^3;']);
         eval(['acc_pointMasses = acc_pointMasses + GM(j).*(-r0',jstr,...
             './r0',jstr,'_3 - r',jstr,'S./r',jstr,'S_3);']);
-        name = ["SunMass","EarthMass"];
-        eval(['fprintf(TextAlt, name(j) +"   "+ num2str(norm(GM(j).*(-r0',jstr,...
+        name = ["SunMass","JupMass"];
+        eval(['fprintf(TextAcc, name(j) +"   "+ num2str(norm(GM(j).*(-r0',jstr,...
             './r0',jstr,'_3 - r',jstr,'S./r',jstr,'S_3)))+"\n");']);
     end
 end

@@ -155,9 +155,9 @@
 
 %%  Propagation of the true state
     options = odeset('RelTol',1e-6,'AbsTol',1e-9);
-    [orb.t,orb.XJ2000] = ode45(@prophpop,orb.epoch.span,orb.sat.X0iner,options,orb);
+    [orb.t,orb.XJ2000] = ode45(@prophpop0,orb.epoch.span,orb.sat.X0iner,options,orb);
     save('output/ORBdata','orb');
-    ORBIT3D;
+    % ORBIT3D;
 
     rmpath([pwd,'/prop']);
     rmpath("mice/lib")
