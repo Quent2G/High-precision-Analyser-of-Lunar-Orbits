@@ -4,7 +4,7 @@ import numpy as np
 from ConvMatlab import ConvMatlab
 
 # Get original state
-path = "input/statesNRHOCapstone.csv"
+path = "input/statesDRO14.csv"
 with open(path) as file:
     line = file.readline()
     line = file.readline()
@@ -35,6 +35,7 @@ VZ = np.array(VZ)*LU/TU
 # VY = -0.1
 # VX = -0.01
 # Z += 500
+VY = 0.565
 
 # Calc Omg=dur/(dt*uTh)
 dt = 1
