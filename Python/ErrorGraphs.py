@@ -26,7 +26,6 @@ start,stop = mat['orb']['epoch']['et']
 # y = rM * np.outer(np.sin(u), np.sin(v))
 # z = rM * np.outer(np.ones(np.size(u)), np.cos(v))
 # ax.plot_surface(x, y, z,cmap = "gray",zorder=1)
-# # ax.set_aspect('equal')
 
 # #plot traj
 # l=None
@@ -47,6 +46,7 @@ start,stop = mat['orb']['epoch']['et']
 # EndP = XJ2000[-1]
 # ax.plot(EndP[0],EndP[1],EndP[2],"y.",zorder=10,label="Final Pos All")        #Starting point All
 # ax.legend()
+# plt.axis("equal")
 ###
 
 ### Second graph
