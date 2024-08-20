@@ -7,19 +7,18 @@ fig = plt.figure(figsize=(10,8))
 ax = plt.axes(projection='3d')
 l=int(1e10)
 # l=20000
-c=0
-model=0
-earth=1
+c=1
+model=1
+earth=0
 
 ###Plot DRO_NRHOSimuated
 mat = read_mat('../MATLAB/LHPOP/output/ORBdata.mat')
-XJ2000 = mat["orb"]["XJ2000"]
-if c: XC = mat["orb"]["XC"]
-T = mat["orb"]["t"]
-# ax.plot(XJ2000[:l,0],XJ2000[:l,1],XJ2000[:l,2],"g",zorder=10,label="NRHO - Gateway")
-ax.plot(XJ2000[:l,0],XJ2000[:l,1],XJ2000[:l,2],"r",zorder=10,label="DRO - Orion")
-ax.scatter(XJ2000[0,0],XJ2000[0,1],XJ2000[0,2],c="g")
-if c: ax.plot(XC[:l,0],XC[:l,1],XC[:l,2],"orange",zorder=10,label="traj corrected")
+XJ2000 = mat["orb"]["seq"]["a"]["XJ2000"]
+T = mat["orb"]["seq"]["a"]["t"]
+if c: XC = mat["orb"]["seq"]["a"]["XC"]
+ax.plot(XJ2000[:l,0],XJ2000[:l,1],XJ2000[:l,2],"r",zorder=10,label="Initial guess")
+ax.scatter(XJ2000[0,0],XJ2000[0,1],XJ2000[0,2],c="r")
+if c: ax.plot(XC[:l,0],XC[:l,1],XC[:l,2],"orange",zorder=10,label="Traj. converged")
 if c: ax.scatter(XC[0,0],XC[0,1],XC[0,2],c="orange")
 ax.set_xlabel('X (km)')
 ax.set_ylabel('Y (km)')
@@ -29,14 +28,14 @@ ax.scatter(0,0,0,c="gray",label = "Moon")
 ### Plot DRO_NRHOTheoric
 sp.furnsh("input/de430.bsp")
 et26_11 = 722692869.182957
-SE = sp.spkezr("EARTH",et26_11,"J2000","NONE","MOON")[0]
+SE = sp.spkezr("EARTH",et26_11-86400,"J2000","NONE","MOON")[0]
 def norm(R):
     return np.sqrt((R**2).sum())
 LU = 389703
 TU = 382981
 mu = 1.215058560962404E-2
-# path = "input/statesDRO14.csv"
-path = "input/statesNRHOCapstone.csv"
+path = "input/statesDRO14.csv"
+# path = "input/statesNRHOCapstone.csv"
 with open(path) as file:
     Lines = [l.strip() for l in file.readlines()]
 
