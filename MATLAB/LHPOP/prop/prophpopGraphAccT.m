@@ -19,6 +19,10 @@ function [X] = prophpopGraphAccT(t,X0,model)
     acc_centralPlanet = accelharmonic(xJ2000,Rgeog_iner',model.prop.harmonics.degree,model.prop.harmonics.order,...
         model.prop.harmonics.Cnm,model.prop.harmonics.Snm,model.centralPlanet.GM,model.centralPlanet.RE);
     fprintf(TextAcc, "LunGrav   "+num2str(norm(acc_centralPlanet))+"\n");
+    
+    r = norm(xJ2000);
+    LPM = model.centralPlanet.GM/r^2;
+    fprintf(TextAcc, "LGF   "+num2str(abs(norm(acc_centralPlanet)-LPM))+"\n");
     % ---------------------------------------------------------------------------------------------------------- %   
     
     % acceleration due to the Earth gravity field
@@ -31,6 +35,10 @@ function [X] = prophpopGraphAccT(t,X0,model)
                 -accelharmonic(-R_Moon_Earth,REarth_iner',model.prop.harmonics.degreeE,model.prop.harmonics.orderE,...
                 model.prop.harmonics.ECnm,model.prop.harmonics.ESnm,model.Earth.GM,model.Earth.RE);
     fprintf(TextAcc, "EarthGrav   "+num2str(norm(acc_earth))+"\n");
+    r = xJ2000-R_Moon_Earth;
+    rS = R_Moon_Earth;
+    EPM =  norm(model.Earth.GM*abs(-r/norm(r)^3 - rS/norm(rS)^3));
+    fprintf(TextAcc, "EGF   "+num2str(norm(acc_earth)-EPM)+"\n");
     % ---------------------------------------------------------------------------------------------------------- %   
     
     % acceleration due to the general relativity

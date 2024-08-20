@@ -2,8 +2,8 @@
     % ==================================================================================================================================================
     ts = cputime;
     
-    HarmD = 70; % e-3 , maximum degree of the harmonics
-    HarmO = 70; % e-3 , maximum order of the harmonics (set 0 for only zonal harmonics)
+    HarmD = 150; % e-3 , maximum degree of the harmonics
+    HarmO = 150; % e-3 , maximum order of the harmonics (set 0 for only zonal harmonics)
     isE = 1;    % e-8 , Do we considere the Earth as a perturbation
     isS = 1;    % e-11, Do we considere the Sun as a perturbation
     RC = 1.3;   % e-11, reflection coefficient (0 No SRP - 1 black body - 2 total reflection - 1.3 example)
@@ -15,17 +15,17 @@
 
     Asat = 2;   % satellite area perpendicular to sun direction [m^2]
     msat = 1E3; % satellite mass [kg]
-    TStart = '2022 Nov 26 00:00:00.000';  % start time [yyyy month dd hh:mm:ss.---]
-    TStop =  '2022 Dec 10 00:00:00.000';  % stop time [yyyy month dd hh:mm:ss.---]
+    TStart = '1994 Apr 15 15:00:00.000';  % start time [yyyy month dd hh:mm:ss.---]
+    TStop = '1994 Apr 16 6:00:00.000';  % start time [yyyy month dd hh:mm:ss.---]
     TStep = 30; % Time step [s]
     RefS = 'J2000';   % Reference System (J2000/MOON_ME)
-    CoordT = 'Cartesian'; %Coordinates Type (Cartesian/Keplerian)
-    X = -1642.1842792591378; % Semi Major Axis
-    Y = 62149.566213382524;    % Eccentricity
-    Z = 32159.59842593645;    % Inclination
-    VX = 0.3549830252637374;    % Longitude of Ascending Node
-    VY = 0.017074626095640213;    % Argument of Periapsis
-    VZ  = -0.016135387025700578;    % Mean Anomaly
+    CoordT = 'Cartesian'; %Coordinates Type (Cartesian/Keplerian)   
+    X = -2098.4745703999997; % Semi Major Axis
+    Y = 1298.5243538999998;    % Eccentricity
+    Z = -3494.2586871999997;    % Inclination
+    VX = 0.8948704814799997;    % Longitude of Ascending Node
+    VY = 0.17693000307000004;    % Argument of Periapsis
+    VZ  = -0.15601097269;    % Mean Anomaly
 
 %% SPICE LIBRARIES
     % ==================================================================================================================================================

@@ -5,6 +5,7 @@ from ConvMatlab import ConvMatlab
 
 # Get original state
 path = "input/statesDRO14.csv"
+# path = "input/statesNRHOCapstone.csv"
 with open(path) as file:
     line = file.readline()
     line = file.readline()
@@ -35,7 +36,7 @@ VZ = np.array(VZ)*LU/TU
 # VY = -0.1
 # VX = -0.01
 # Z += 500
-VY = 0.565
+# VY = 0.565
 
 # Calc Omg=dur/(dt*uTh)
 dt = 1
@@ -50,3 +51,11 @@ VS = MB[3:] + VX*uR + VY*uTh + VZ*uZ + np.cross(Omg*uZ,BS)
 init = list(RS)+list(VS)
 ConvMatlab(init)
 sp.kclear()
+
+
+        # X = -1642.1842792591378; % Semi Major Axis
+        # Y = 62149.566213382524;    % Eccentricity
+        # Z = 32159.59842593645;    % Inclination
+        # VX = 0.3549830252637374;    % Longitude of Ascending Node
+        # VY = 0.017074626095640213;    % Argument of Periapsis
+        # VZ  = -0.016135387025700578;    % Mean Anomaly
