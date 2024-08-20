@@ -7,17 +7,17 @@ from tqdm import tqdm
 fig = plt.figure(figsize=(10,8))
 ax = plt.axes(projection='3d')
 l=int(1e10)
-# l=20000
+l=20000
 c=0
 model=0
 earth=0
 
 ###Plot DRO_NRHOSimuated
 mat = read_mat('../MATLAB/LHPOP/output/ORBdata.mat')
-XJ2000 = mat["orb"]["XJ2000"]
-T = mat["orb"]["t"]
+XJ2000 = mat["orb"]["seq"]["a"]["XJ2000"]
+T = mat["orb"]["seq"]["a"]["t"]
 sp.furnsh("input/de430.bsp")
-if c: XC = mat["orb"]["XC"]
+if c: XC = mat["orb"]["seq"]["a"]["XC"]
 
 # Convert position from inertial frame to rotational at each step
 RS = []
@@ -26,12 +26,11 @@ RE = []
 LU = 389703
 TU = 382981
 mu = 1.215058560962404E-2
-et26_11 = 722692869.182957
 
 def norm(R):
     return np.sqrt((R**2).sum())
 
-for t in tqdm(range(len(T))):
+for t in tqdm(range(min(len(T),l))):
     et = T[t]
     SE = sp.spkezr("EARTH",et,"J2000","NONE","MOON")[0]
 
@@ -52,10 +51,11 @@ for t in tqdm(range(len(T))):
 RS = np.array(RS)
 if c: RSC = np.array(RSC)
 RE = np.array(RE)
-# ax.plot(RS[:,0],RS[:,1],RS[:,2],"g",zorder=10,label="NRHO - Gateway")
-ax.plot(RS[:,0],RS[:,1],RS[:,2],"r",zorder=10,label="DRO - Orion")
-ax.scatter(RS[0,0],RS[0,1],RS[0,2],c="r")
-if c: ax.plot(RSC[:,0],RSC[:,1],RSC[:,2],"orange",zorder=10,label="traj corrected")
+ax.plot(RS[:,0],RS[:,1],RS[:,2],"g",label="DRO trajectory")
+# ax.plot(RS[:,0],RS[:,1],RS[:,2],"r",zorder=10,label="DRO - Orion")
+ax.scatter(RS[0,0],RS[0,1],RS[0,2],c="b", label = "Initial pos Orion")
+ax.scatter(RS[1440,0],RS[1440,1],RS[1440,2],c="y", label = "Final Pos Orion")
+if c: ax.plot(RSC[:,0],RSC[:,1],RSC[:,2],"orange",zorder=10,label="Traj. converged")
 if c: ax.scatter(RSC[0,0],RSC[0,1],RSC[0,2],c="orange")
 if earth: ax.scatter(-LU,0,0,c="b",label="Earth_CR3BP")
 if earth: ax.plot(RE[:,0],RE[:,1],RE[:,2],c="c",label="Earth")
@@ -69,8 +69,8 @@ plt.axis("equal")
 LU = 389703
 TU = 382981
 mu = 1.215058560962404E-2
-# path = "input/statesDRO14.csv"
-path = "input/statesNRHOCapstone.csv"
+path = "input/statesDRO14.csv"
+# path = "input/statesNRHOCapstone.csv"
 with open(path) as file:
     Lines = [l.strip() for l in file.readlines()]
 
