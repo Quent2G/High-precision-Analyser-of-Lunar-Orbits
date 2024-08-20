@@ -10,5 +10,6 @@ KPL/MK
 			'$DATA/naif0012.tls',
 			'$DATA/moon_pa_de421_1900-2050.bpc',
 			'$DATA/moon_080317.tf',
-			'$DATA/moon_assoc_me.tf')
+			'$DATA/moon_assoc_me.tf',
+			'$DATA/earth_720101_230601.bpc')
 \begintext

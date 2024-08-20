@@ -22,6 +22,16 @@ def read_horizon(path):
         Vel = Lines[l].split("=")
         for i in range(3):
             Data[-1].append(float(Vel[i+1].split()[0]))
-        l+=2
-        
-    return(pd.DataFrame(Data,columns=["T","X","Y","Z","VX","VY","VZ"]))
+        l+=1
+        if "Orion." in path or "Orion2." in path:
+            Vel = Lines[l].split("=")
+            for i in range(3):
+                Data[-1].append(float(Vel[i+1].split()[0]))
+            l+=1
+    
+
+    col= ["T","X","Y","Z","VX","VY","VZ"]
+    if "Orion." in path or "Orion2." in path: col += ["LT","RG","RR"]
+    return(pd.DataFrame(Data,columns=col))
+
+# read_horizon("input/CAPSTONE_25_00__01_12.txt")

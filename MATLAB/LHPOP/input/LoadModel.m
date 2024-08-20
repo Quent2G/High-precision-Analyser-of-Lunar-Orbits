@@ -1,8 +1,8 @@
 function [orb] = LoadModel(modeldef,orb)
 
     if modeldef == "Ref"
-        HarmD = 70; % e-3 , maximum degree of the harmonics
-        HarmO = 70; % e-3 , maximum order of the harmonics (set 0 for only zonal harmonics)
+        HarmD = 150; % e-3 , maximum degree of the harmonics
+        HarmO = 150; % e-3 , maximum order of the harmonics (set 0 for only zonal harmonics)
         isE = 1;    % e-8 , Do we considere the Earth as a perturbation
         isS = 1;    % e-11, Do we considere the Sun as a perturbation
         RC = 1.3;   % e-11, reflection coefficient (0 No SRP - 1 black body - 2 total reflection - 1.3 example)
@@ -34,8 +34,8 @@ function [orb] = LoadModel(modeldef,orb)
 %% FORCE MODEL
     % ==================================================================================================================================================
     orb.frame.integr = 'J2000';   % integration frame (inertial)
-    orb.frame.from   = 'MOON_ME'; % frame where the gravity potential is defined
-    orb.frame.fromE   = 'IAU_EARTH'; % frame where the gravity potential is defined
+    orb.frame.from   = 'MOON_PA'; % frame where the lunar gravity potential is defined
+    orb.frame.fromE   = 'ITRF93'; % frame where the Earth gravity potential is defined
     orb.frame.to     = orb.frame.integr;
     orb.centralPlanet.stringName = 'Moon';
     orb.Earth.stringName = 'Earth';
@@ -43,12 +43,11 @@ function [orb] = LoadModel(modeldef,orb)
     % Physical Constants
     orb.const.G           = 6.67428e-20;   % Universal gravitational constant                      [km^3 kg^-1 s^-2]
     % Moon
-    orb.centralPlanet.RE  = 1737.74;       % Radius of the Moon                                  [km]
-    orb.centralPlanet.GM  = 4902.7926024;  % Gravitational parameter of the Moon                   [km^3 s^-2]
+    orb.centralPlanet.RE  = 1738;       % Radius of the Moon                                  [km]
+    orb.centralPlanet.GM  = 4902.7999671;  % Gravitational parameter of the Moon                   [km^3 s^-2]
     % Earth
-    orb.Earth.RE  = 6371.00;               % Radius of the Earth                                  [km]
-    orb.Earth.M  = 5.97218639e24*isE;        % Mass of the Earth                                      [kg]
-    orb.Earth.GM  = orb.const.G.*orb.Earth.M;          % Gravitational parameter of the Earth                   [km^3 s^-2]
+    orb.Earth.RE  = 6378.1363;               % Radius of the Earth                                  [km]
+    orb.Earth.GM  = 398600.4415*isE;          % Gravitational parameter of the Earth                   [km^3 s^-2]
     % Point Masses : Sun and Jupiter
     orb.pointMasses.M(1)  = 1.9884e30*isS;             % Mass of the Sun                                       [kg]
     orb.pointMasses.M(2)  = 1.89813e27*isJ;             % Mass of the Sun                                       [kg]
