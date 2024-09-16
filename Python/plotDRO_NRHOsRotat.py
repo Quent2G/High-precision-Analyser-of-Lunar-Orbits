@@ -51,7 +51,7 @@ for t in tqdm(range(min(len(T),l))):
 RS = np.array(RS)
 if c: RSC = np.array(RSC)
 RE = np.array(RE)
-ax.plot(RS[:,0],RS[:,1],RS[:,2],"g",label="DRO trajectory")
+ax.plot(RS[:,0],RS[:,1],RS[:,2],"r",label="DRO trajectory")
 # ax.plot(RS[:,0],RS[:,1],RS[:,2],"r",zorder=10,label="DRO - Orion")
 ax.scatter(RS[0,0],RS[0,1],RS[0,2],c="b", label = "Initial pos Orion")
 ax.scatter(RS[1440,0],RS[1440,1],RS[1440,2],c="y", label = "Final Pos Orion")

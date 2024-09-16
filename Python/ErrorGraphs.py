@@ -18,7 +18,7 @@ sp.furnsh("input/naif0012.tls")
 SK = "CLEMENTINE"
 # SK = "LRO"
 start,stop = T[0],T[-1]
-g=0
+g=1
 
 ### plot moon and traj
 if g:
@@ -32,7 +32,7 @@ if g:
     x = rM * np.outer(np.cos(u), np.sin(v))
     y = rM * np.outer(np.sin(u), np.sin(v))
     z = rM * np.outer(np.ones(np.size(u)), np.cos(v))
-    ax.plot_surface(x, y, z,cmap = "gray",zorder=1)
+    ax.plot_surface(x, y, z,cmap = "Blues_r",zorder=1)
 
     #plot traj
     l=None
@@ -42,12 +42,13 @@ if g:
     ax.set_zlabel('Z (km)')
 
     # Plot initial position
-    state = sp.spkezr(SK,start,"J2000","NONE","MOON")[0]
-    ax.plot(state[0],state[1],state[2],"b.",zorder=10,label="Initial pos Clementine")        #Starting point
+    # state = sp.spkezr(SK,start,"J2000","NONE","MOON")[0]
+    state = XJ2000[0]
+    ax.plot(state[0],state[1],state[2],"b.",zorder=10,label="Initial pos")        #Starting point
 
     # Plot final position
-    state = sp.spkezr(SK,stop,"J2000","NONE","MOON")[0]
-    ax.plot(state[0],state[1],state[2],"c.",zorder=10,label="Final Pos Clementine")        #Ending point True
+    # state = sp.spkezr(SK,stop,"J2000","NONE","MOON")[0]
+    # ax.plot(state[0],state[1],state[2],"c.",zorder=10,label="Final Pos Clementine")        #Ending point True
 
     # Plot final position Precise Prop
     EndP = XJ2000[-1]
@@ -63,9 +64,22 @@ Tspan = stop-start
 Err = []
 for _ in range(6):Err.append([])
 
+path = "input/od_eci_id_46984.csv"
+with open(path) as file:
+    Lines = [l.strip() for l in file.readlines()]
+JD,state = [],[]
+for l in Lines[1:]:
+    li = [float(i) for i in l.split(",")[:-1]]
+    JD.append(float(li[0]))
+    state.append(np.array(li[1:]))
+et = []
+for j in JD:
+    et.append(sp.unitim(j+2400000.5,"JDTDT","TDB"))
+
 for i in tqdm(range(len(XJ2000))):
     Time = T[i]
-    state = sp.spkezr(SK,Time,"J2000","NONE","MOON")[0]
+    # state = sp.spkezr(SK,Time,"J2000","NONE","MOON")[0]
+
     for j in range(6):
         Err[j].append(state[j]-XJ2000[i,j])
 
