@@ -1,4 +1,4 @@
-% HALO, High-precision Analysis of Lunar Orbits, is here built for the propagation of a lunar orbiter.
+% HALO, High-precision Analyser of Lunar Orbits, is here built for the propagation of a lunar orbiter.
 % The motion is integrated under 
 % - the Keplerian attraction force
 % - the perturbations due to the asymmetry of the lunar gravity field (up to 350*350 harmonics)
@@ -9,10 +9,9 @@
 % - the Earth's albedo
 %     
 % The integration is performed in the "J2000" inertial frame, and the output is the state and time vectors.
-% A Matlab graphical tool can be used by uncommenting %ORBIT3D just before runtime 
 %
 % IMPORTANT: it is required to install mice toolbox from
-% https://naif.jpl.nasa.gov/naif/toolkit_MATLAB_PC_Windows_VisualC_MATLAB8.x_64bit.html
+% https://naif.jpl.nasa.gov/naif/toolkit_MATLAB.html
 %
 % Authors:
 % (c)Copyright 2017 - Ennio Condoleo
@@ -122,7 +121,6 @@
     end
 
     save('output/ORBdata','orb');
-    % ORBIT3D;
     disp("Run Time: "+num2str(cputime - ts)+"s")
     
 %% Close Path

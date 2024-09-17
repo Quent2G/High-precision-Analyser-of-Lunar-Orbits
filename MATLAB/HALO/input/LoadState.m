@@ -40,9 +40,9 @@ function [orb] = LoadState(Orbit,orb)
         X = 12.931; % Semi Major Axis
         Y = 235.558;    % Eccentricity
         Z = 2388.38;    % Inclination
-        VX = -1.80519;    % Longitude of Ascending Node
-        VY = 0.0991;    % Argument of Periapsis
-        VZ  = 3.83e-07;    % Mean Anomaly
+        VX = 1.80519;    % Longitude of Ascending Node
+        VY = -0.0991;    % Argument of Periapsis
+        VZ  = -3.83e-07;    % Mean Anomaly
 
     elseif Orbit == "CLEM15"
         RefS = 'J2000';   % Reference System (J2000/MOON_ME)

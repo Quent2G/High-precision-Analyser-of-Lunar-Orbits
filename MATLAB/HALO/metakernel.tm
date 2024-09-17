@@ -1,7 +1,7 @@
 KPL/MK 
  \begindata 
 		 PATH_VALUES       = (
-			'C:/Users/quent/Documents/Work_Study/ACSER/MATLAB/LHPOP/ker'
+			'C:/Users/quent/Documents/Work_Study/ACSER/MATLAB/HALO/ker'
 		)
 		PATH_SYMBOLS      = ('DATA')
 		KERNELS_TO_LOAD   = (

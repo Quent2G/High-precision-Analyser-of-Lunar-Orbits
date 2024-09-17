@@ -1,6 +1,6 @@
 # Allows to compare the propagation of a true ephemeris state of a satellite with its real evolution
 #
-# Input:  mat = The propagation of the initial state (just need to run LHPOP)
+# Input:  mat = The propagation of the initial state (just need to run HALO)
 #       & bsp file = A data file from the satellite
 # Output:
 #         Plot the trajectory (user's choice)
@@ -17,7 +17,7 @@ from tqdm import tqdm
 from Deliverable.process import read_horizon
 
 ### Load the computed data of propagation
-mat = read_mat('../MATLAB/LHPOP/output/ORBdata.mat')
+mat = read_mat('../MATLAB/HALO/output/ORBdata.mat')
 XJ2000 = mat["orb"]["seq"]["a"]["XJ2000"]
 T = mat["orb"]["seq"]["a"]["t"]
 XDF = pd.DataFrame(XJ2000,columns = ["X","Y","Z","VX","VY","VZ"])

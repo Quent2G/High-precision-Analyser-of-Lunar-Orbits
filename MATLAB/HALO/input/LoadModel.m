@@ -63,7 +63,7 @@ function [orb] = LoadModel(modeldef,orb)
 
     orb.prop.harmonics.degreeE   = HarmDE; % maximum degree of the harmonics
     orb.prop.harmonics.orderE    = HarmOE; % maximum order of the harmonics (set 0 for only zonal harmonics)
-    orb.prop.harmonics.filepathE = [cd,'/input/gravity_models/Earth_C-EGM2008.txt'];
+    orb.prop.harmonics.filepathE = [cd,'/input/gravity_models/Earth_EGM2008.txt'];
    
     % Harmonics coefficients
     [orb.prop.harmonics.Cnm,orb.prop.harmonics.Snm] = normalizedharmonics(orb.prop.harmonics.filepath,orb.prop.harmonics.degree);

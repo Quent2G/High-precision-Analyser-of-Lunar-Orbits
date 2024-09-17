@@ -1,5 +1,6 @@
 # Converts the initial state from a CR3BP orbit chosen on https://ssd.jpl.nasa.gov/tools/periodic_orbits.html#/intro
-# in the Earth-Moon rotationnal and barycentered frame into the ephemeris Moon centered inertial frame. 
+# in the Earth-Moon rotationnal and barycentered frame into the ephemeris Moon centered inertial frame 
+# in order to use it as an initial state for the propagator.
 #
 # Input:  path = A CR3BP orbit csv file
 # Output: The converted initial state ready to paste into the propagator LoadState.m function
