@@ -44,10 +44,10 @@ TrajectoryErrors.py allows to compare the propagation of a true ephemeris state 
 CR3BPfitting.py converts the initial state from a CR3BP orbit chosen on https://ssd.jpl.nasa.gov/tools/periodic_orbits.html#/intro in the Earth-Moon rotationnal and barycentered frame into the ephemeris Moon centered inertial frame in order to use it as an initial state for the propagator.   
 process.py gathers all the processing functions used in the other python files.
 
-### Get an ephemeris 3-body-problem orbit
-You can get a CR3BP orbit from the [JPL website](https://ssd.jpl.nasa.gov/tools/periodic_orbits.html#/intro). It is a solution in a simplified Earth-Moon rotational frame.   
-CR3BPfitting.py will fit the simplified model on a specific epoch (chosen at 1 Jan 2024 in the example) and convert the initial position to be used for propagation.   
-Then a sequence of type "TBPOtim" allows to compute an ephemeris orbit from this fitted initial guess    
+### Process an ephemeris 3-body-problem orbit
+You can get a CR3BP orbit from the [JPL website](https://ssd.jpl.nasa.gov/tools/periodic_orbits.html#/intro). This orbit is a solution in a simplified model and in the Earth-Moon rotational frame.   
+CR3BPfitting.py will fit the simplified model on an ephemeris one at a specific epoch (chosen at 1 Jan 2024 in the example) and convert the initial position to be used for propagation.   
+Then a sequence of type "TBPOtim" allows to compute an ephemeris orbit from this fitted initial guess.    
 The following sequential gives an example for a NRHO close to the Capstone one:  
    orb = LoadState("NRHO",orb);  
    orb.seq.Time = cspice_str2et(orb.sat.t0); 
