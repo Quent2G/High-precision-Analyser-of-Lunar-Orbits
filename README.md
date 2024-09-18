@@ -49,14 +49,15 @@ You can get a CR3BP orbit from the [JPL website](https://ssd.jpl.nasa.gov/tools/
 CR3BPfitting.py will fit the simplified model on an ephemeris one at a specific epoch (chosen at 1 Jan 2024 in the example) and convert the initial position to be used for propagation.   
 Then a sequence of type "TBPOtim" allows to compute an ephemeris orbit from this fitted initial guess.    
 The following sequential gives an example for a NRHO close to the Capstone one:  
+
    orb = LoadState("NRHO",orb);  
-   orb.seq.Time = cspice_str2et(orb.sat.t0); 
+   orb.seq.Time = cspice_str2et(orb.sat.t0);    
    orb.seq.a.type = "TBPOptim";  
    orb.seq.a.T = 5.7444e+05;  
 
-Finally, Visualisation.py allows to visualise the initial guess and the converged solution by puting the Converged option to 1. The RotationalF option can also be put to 1 to see the closed orbit in rotational frame.   
+Finally, Visualisation.py allows to visualise the initial guess and the converged solution by putting the Converged option to 1. The RotationalF option can also be put to 1 to observe the closed orbit in the rotational frame.   
 
-The same can be done for DRO14 but the convergence is a bit harder so that we have to use n=2 (to change in the algorithm's file) and use only two periods due to the long period of the DRO.
+The same can be done for DRO14 but the convergence is a bit harder so that we have to change n=2 (in the algorithm's file) and use only two periods due to the long period of the DRO.
 
 # Authors and acknowledgment
 
