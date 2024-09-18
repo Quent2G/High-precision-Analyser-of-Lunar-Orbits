@@ -9,9 +9,9 @@ HALO is a mission design tool build on a high accuracy propagator for lunar orbi
 After copying the project on your local machine (git clone [url]), you have to:
 
 1. If you are a Windows user, skip this part (the windows mice is already installed), or else: Download the mice folder depending on your machine OS at this link : [mice](https://naif.jpl.nasa.gov/naif/toolkit_MATLAB.html)  
-   Replace the mice folder in the MATLAB/LHPOP folder with your one.
+   Replace the mice folder in the MATLAB/HALO folder with your one.
 2. Download the de430.bsp ephemeris at [NAIF de430](https://naif.jpl.nasa.gov/pub/naif/generic_kernels/spk/planets/)
-   Place it in MATLAB/LHPOP/ker.
+   Place it in MATLAB/HALO/ker and in Python/input.
 
 Attention for Mac users with a Mac processor (no problem with Intel processors), you may need to recompile the mexfile following these instructions for Mac Silicon processors, e.g., M2:
 
@@ -20,7 +20,7 @@ Attention for Mac users with a Mac processor (no problem with Intel processors),
    - a. system('/bin/csh -f importMice.csh'), followed by,
    - b. system('/bin/csh -f makeall.csh');
 3. A new mex file mice.mexmaci64 should be generated in the lib sub directory;
-4. Copy the whole mice directory to your project directory in MATLAB/LHPOP.
+4. Copy the whole mice directory to your project directory in MATLAB/HALO.
 
 # Usage
 
@@ -28,6 +28,7 @@ The MATLAB folder contains all you need to run the tool.
 The Python folder contains all you need for the data visualisation.
 
 The main usage of HALO is to construct a mission by changing the input files like LoadSequential.m on MATLAB, then run the mission by running the main script HALO.m, and finally use python scripts like Visualisation.py to process the output file.
+Read the following parts to learn what can be done with HALO.
 
 ### Architechture of the MATLAB
 The 2 metakernel files allow to dialogue with SPICE by loading the relevant kernel stored in the "ker" folder   
@@ -42,6 +43,20 @@ Visualisation.py allows to plot a propagation after processing, the user can cho
 TrajectoryErrors.py allows to compare the propagation of a true ephemeris state of a satellite with its real evolution.   
 CR3BPfitting.py converts the initial state from a CR3BP orbit chosen on https://ssd.jpl.nasa.gov/tools/periodic_orbits.html#/intro in the Earth-Moon rotationnal and barycentered frame into the ephemeris Moon centered inertial frame in order to use it as an initial state for the propagator.   
 process.py gathers all the processing functions used in the other python files.
+
+### Get an ephemeris 3-body-problem orbit
+You can get a CR3BP orbit from the [JPL website](https://ssd.jpl.nasa.gov/tools/periodic_orbits.html#/intro). It is a solution in a simplified Earth-Moon rotational frame.   
+CR3BPfitting.py will fit the simplified model on a specific epoch (chosen at 1 Jan 2024 in the example) and convert the initial position to be used for propagation.   
+Then a sequence of type "TBPOtim" allows to compute an ephemeris orbit from this fitted initial guess    
+The following sequential gives an example for a NRHO close to the Capstone one:  
+   orb = LoadState("NRHO",orb);  
+   orb.seq.Time = cspice_str2et(orb.sat.t0); 
+   orb.seq.a.type = "TBPOptim";  
+   orb.seq.a.T = 5.7444e+05;  
+
+Finally, Visualisation.py allows to visualise the initial guess and the converged solution by puting the Converged option to 1. The RotationalF option can also be put to 1 to see the closed orbit in rotational frame.   
+
+The same can be done for DRO14 but the convergence is a bit harder so that we have to use n=2 (to change in the algorithm's file) and use only two periods due to the long period of the DRO.
 
 # Authors and acknowledgment
 

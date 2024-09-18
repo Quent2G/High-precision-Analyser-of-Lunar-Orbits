@@ -1,4 +1,5 @@
 function [orb] = LoadModel(modeldef,orb)
+%LOADMODEL The model used by the propagator is defined here
 
     if modeldef == "Ref"
         HarmD = 150; % e-3 , maximum degree of the harmonics

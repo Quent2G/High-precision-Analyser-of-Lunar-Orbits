@@ -9,11 +9,11 @@
 import matplotlib.pyplot as plt
 import spiceypy as sp
 import numpy as np
-from Deliverable.process import norm, ConvMatlab
+from process import norm, ConvMatlab
 
 ### Get original state
-path = "input/statesDRO14.csv"
-# path = "input/statesNRHOCapstone.csv"
+# path = "input/statesDRO14.csv"
+path = "input/statesNRHOCapstone.csv"
 
 ### Read initial state
 with open(path) as file:
@@ -24,7 +24,7 @@ X,Y,Z,VX,VY,VZ = [float(x) for x in line.strip().split(",")[1:]]
 ### Get Moon-Barycenter (MB) vector (CR3BP equivalent)
 sp.furnsh("input/de430.bsp")
 sp.furnsh("input/naif0012.tls")
-et = sp.datetime2et(sp.datetime(2022,11,26))
+et = sp.datetime2et(sp.datetime(2024,1,1))
 ME = sp.spkezr("EARTH",et,"J2000","NONE","MOON")[0]
 LU = 389703
 TU = 382981

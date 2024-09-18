@@ -13,18 +13,18 @@ import matplotlib.pyplot as plt
 import numpy as np
 from pymatreader import read_mat
 import spiceypy as sp
-from process import rotational,Model
+# from process import rotational,Model
 
 fig = plt.figure(figsize=(10,8))
 ax = plt.axes(projection='3d')
 
 ### User's choice
-RotationalF = 0                                 #Plot the sequential in the Earth-Moon rotational frame (0=inertial)
-Converged =   0                                 #Plot the initial and converged trajectory (for optimization mode)
+RotationalF = 1                                 #Plot the sequential in the Earth-Moon rotational frame (0=inertial)
+Converged =   1                                 #Plot the initial and converged trajectory (for optimization mode)
 earth =       0                                 #Plot the earth (only in rotat. frame)
-model =       0                                 #Plot the CR3BP trajectory (for optimization mode)
-path = "input/statesDRO14.csv"                  #Path of the model (initial condition for optimization)
-# path = "input/statesNRHOCapstone.csv"
+model =       1                                 #Plot the CR3BP trajectory (for optimization mode)
+# path = "input/statesDRO14.csv"                  #Path of the model (initial condition for optimization)
+path = "input/statesNRHOCapstone.csv"
 
 ### Load the computed data
 mat = read_mat('../MATLAB/HALO/output/ORBdata.mat')

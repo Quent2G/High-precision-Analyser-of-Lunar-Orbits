@@ -66,14 +66,15 @@
             [orb.seq.(SeqNames{i}).t,orb.seq.(SeqNames{i}).XJ2000]...
                 = ode113(@prophpop,Tspan,[X(1:3) newX(4:6)],options,orb);
 
-        elseif Seq.type == "fsolveProp"
+        elseif Seq.type == "TBPOptim"
             Period = Seq.T;
             Tspan = Time:TStep:Time+4*Period;
-            X = fsolveConv(orb.sat.X0iner,orb);
+            X = TBPOptim(orb.sat.X0iner,orb);
 
             [orb.seq.(SeqNames{i}).t,orb.seq.(SeqNames{i}).XJ2000]...
                 = ode113(@prophpop,Tspan,orb.sat.X0iner,options,orb);
             [~,orb.seq.(SeqNames{i}).XC] = ode113(@prophpop,Tspan,X,options,orb);
+            fprintf('The best solution was saved in output\n');
 
         elseif Seq.type == "Lambert"
             span = Seq.span;
@@ -90,10 +91,10 @@
             [orb.seq.(SeqNames{i}).t,orb.seq.(SeqNames{i}).XJ2000]...
                 = ode113(@prophpop,Tspan,[r1 V1],options,orb);
         
-        elseif Seq.type == "OptimLambert"
-            [t1,t2,X2,span] = LambertConv(orb); % Processing of the solution
+        elseif Seq.type == "LambertOptim"
+            [t1,t2,X2,span] = LambertOptim(orb); % Processing of the solution
             
-            %------ propagation of the processed solution ------
+            % Propagation of the processed solution
             Tspan = Time:TStep:Time + t1;
             Time = Time+t1;
             [T1,XJ1] = ode113(@prophpop,Tspan,X0,options,orb);

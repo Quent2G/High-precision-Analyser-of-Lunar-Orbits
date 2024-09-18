@@ -16,15 +16,18 @@
 %           model.pointMasses.stringName    = cell array of the name strings of the third bodies
 %           model.pointMasses.GM            =      array of the gravitational parameters of the third bodies [km^3/s^2]
 %           model.frame.integr              = string of the inertial reference system for the integration ('J2000' suggested)
-%           model.centralPlanet.stringName  = name string of the central planet
 %           model.frame.from                = string of the body-fixed reference system (e.g. 'MOON_ME','IAU_EARTH','IAU_MARS', ITRF93')
 %           model.frame.to                  = string of the inertial reference system for the integration (as  model.frame.integr)
-%           model.prop.harmonics.degree     = max degree for the harmonics coefficients
-%           model.prop.harmonics.order      = max order  for the harmonics coefficients
-%           model.prop.harmonics.Cnm        = cosine functions coefficients up to max degree (use normalizedharmonics.m to get them)
-%           model.prop.harmonics.Snm        =   sine functions coefficients up to max degree (use normalizedharmonics.m to get them)
+%           model.prop.harmonics.degree     = max degree for the harmonics coefficients (with added E for Earth)
+%           model.prop.harmonics.order      = max order  for the harmonics coefficients (with added E for Earth)
+%           model.prop.harmonics.Cnm        = cosine functions coefficients up to max degree (use normalizedharmonics.m to get them) (with added E for Earth)
+%           model.prop.harmonics.Snm        =   sine functions coefficients up to max degree (use normalizedharmonics.m to get them) (with added E for Earth)
+%           model.centralPlanet.stringName  = name string of the central planet
 %           model.centralPlanet.GM          = gravitational parameter of the central planet [km^3/s^2]
 %           model.centralPlanet.RE          = equatorial radius       of the central planet [km]
+%           model.Earth.stringName          = name string of the central planet
+%           model.Earth.GM                  = gravitational parameter of the Earth [km^3/s^2]
+%           model.Earth.RE                  = equatorial radius       of the Earth [km]
 %           model.const.c                   = light speed in the vacuum [km/s]
 %           model.const.Ls                  = Sun brightness power [W]
 %           model.sat.rel                   = activator for the general relativity perturbation [1/0]
@@ -32,18 +35,21 @@
 %           model.sat.srp.m                 = satellite mass [kg]
 %           model.sat.srp.CR                = reflection coefficient from the direct radiation (1 black body - 0 no reflection - 2 total reflection)
 %           model.sat.alb.CR                = reflection coefficient for the albedo (1 black body - 0 no reflection - 2 total reflection)
-%           model.wb                        = handle to a waitbar (optional)
 %
 % OUTPUT FROM ODE
 % --------------------------------------------------------------------------
 % t      = integration time [s]
 % X      = state vector [km,km/s]
 %
-% AUTHOR
+% AUTHORS
 % --------------------------------------------------------------------------
 % Ennio Condoleo,
 % Jan 02, 2017 - Rome
 % ennio.condoleo@uniroma1.it
+%
+% 2024 - Quentin Granier
+% Research project at University of New South Wales
+% Supervisor's mail: yiyinfeixiong@gmail.com
 %
 % See also accelpntmasses accelharmonic accelsrp accelalb
 %
@@ -104,9 +110,4 @@ function [X] = prophpop(t,X0,model)
     % ---------------------------------------------------------------------------------------------------------- %
     X = [xdot;vdot];
     % ---------------------------------------------------------------------------------------------------------- %   
-    
-    if isfield(model,'wb')
-        wb = model.wb;
-        waitbar((t-wb.T(1))/(wb.T(end)-wb.T(1)),wb.bar,sprintf('propagating... %07.3f %%',100*(t-wb.T(1))/(wb.T(end)-wb.T(1))));
-    end
 end

@@ -72,20 +72,22 @@ def Model(path,RotationalF,T):
         sp.furnsh("input/de430.bsp")
         RS = []
         i=0
-        for t in Time:
-            # Fitting first
-            et = T[0]+t
-            SE = sp.spkezr("EARTH",et,"J2000","NONE","MOON")[0]
-            SB = (1-mu)*SE/norm(SE)*LU
+        for j in range(4):
+            for t in Time:
+                # Fitting first
+                et = T[0]+t+j*Time[-1]
+                SE = sp.spkezr("EARTH",et,"J2000","NONE","MOON")[0]
+                SB = (1-mu)*SE/norm(SE)*LU
 
-            # Get the inertial frame vectors
-            uR = -SE[:3]/norm(SE[:3])
-            uTh = -SE[3:]/norm(SE[3:])
-            uZ = np.cross(uR,uTh)
+                # Get the inertial frame vectors
+                uR = -SE[:3]/norm(SE[:3])
+                uTh = -SE[3:]/norm(SE[3:])
+                uZ = np.cross(uR,uTh)
 
-            # Conversion
-            RS.append(SB[:3] + X[i]*uR + Y[i]*uTh + Z[i]*uZ)
-            i+=1
+                # Conversion
+                RS.append(SB[:3] + X[i]*uR + Y[i]*uTh + Z[i]*uZ)
+                i+=1
+            i=0
         sp.kclear()
         return [r[0] for r in RS],[r[1] for r in RS],[r[2] for r in RS]
 

@@ -14,7 +14,7 @@ import pandas as pd
 import spiceypy as sp
 import datetime as dt
 from tqdm import tqdm
-from Deliverable.process import read_horizon
+from process import read_horizon
 
 ### Load the computed data of propagation
 mat = read_mat('../MATLAB/HALO/output/ORBdata.mat')
@@ -38,7 +38,7 @@ SC = "LRO"
 ### Load data from the downloaded horizon file
 if h:
     Hrz = read_horizon("input/Orion29_16.txt")
-    # Hrz = read_horizon("input/Change5.txt")
+    # Hrz = read_horizon("input/CAPSTONE_25_00__01_12.txt")
 
 ### Plot trajectory with moon
 if g:

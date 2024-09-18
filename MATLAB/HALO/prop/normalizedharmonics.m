@@ -25,7 +25,7 @@
 % OUTPUT
 % --------------------------------------------------------------------------
 % Cnm      = coefficient of the cosine-term (nm) in the gravity potential
-% Snm      = coefficient of the cosine-term (nm) in the gravity potential
+% Snm      = coefficient of the sine-term (nm) in the gravity potential
 %
 % AUTHOR
 % --------------------------------------------------------------------------
