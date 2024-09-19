@@ -57,7 +57,7 @@ The following sequential gives an example for a NRHO close to the Capstone one:
 
 Finally, Visualisation.py allows to visualise the initial guess and the converged solution by putting the Converged option to 1. The RotationalF option can also be put to 1 to observe the closed orbit in the rotational frame.   
 
-The same can be done for DRO14 but the convergence is a bit harder so that we have to change n=2 (in the algorithm's file) and use only two periods due to the long period of the DRO.
+The same can be done for DRO14, with a period of 14 days, but the convergence is a bit harder so that we have to change n=2 (in the algorithm's file) and use only two periods due to the long period of the DRO.
 
 # Authors and acknowledgment
 
