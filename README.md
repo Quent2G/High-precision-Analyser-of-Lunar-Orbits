@@ -27,7 +27,7 @@ Attention for Mac users with a Mac processor (no problem with Intel processors),
 The MATLAB folder contains all you need to run the tool.  
 The Python folder contains all you need for the data visualisation.
 
-The main usage of HALO is to construct a mission by changing the input files like LoadSequential.m on MATLAB, then run the mission by running the main script HALO.m, and finally use python scripts like Visualisation.py to process the output file.
+The main usage of HALO is to construct a mission by changing the input files like LoadSequential.m on MATLAB, then run the mission by running the main script HALO.m, and finally use python scripts like Visualisation.py to process the output file. Because of relative path, HALO.m as to be run from the HALO folder. This was chosen to avoid windows path length limitation.   
 Read the following parts to learn what can be done with HALO.
 
 ### Architechture of the MATLAB
