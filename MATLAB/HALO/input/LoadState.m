@@ -3,7 +3,7 @@ function [orb] = LoadState(Orbit,orb)
 %interest. 
 %       The Orbits called "RefSpacecraft" are the orbit of interest used in the paper.
 %       The NRHO and DRO14 are CR3BP orbits (close to the Capstone and Orion one) fitted to ephemeris model.
-%       ELFO is a simple Elliptical Lunar Frozen Orbit.
+%       ELFO is a simple Elliptical Lunar Frozen Orbit found in a study.
 %       The user can add new ones or modify the "Perso" Orbit in last position.
 
     if Orbit == "NRHO"
@@ -43,7 +43,7 @@ function [orb] = LoadState(Orbit,orb)
         VY = -0.0991;    % Y-Velocity Coordinate
         VZ = -3.83e-07;    % Z-Velocity Coordinate
 
-        Time = '2022 Nov 26 00:00:00.000';  % start time [yyyy month dd hh:mm:ss.---]
+        Time = '2024 Jan 01 00:00:00.000';  % start time [yyyy month dd hh:mm:ss.---]
 
     elseif Orbit == "RefClementine"
         RefS = 'J2000';   % Reference System (J2000/MOON_ME)

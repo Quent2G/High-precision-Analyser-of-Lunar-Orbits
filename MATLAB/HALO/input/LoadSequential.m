@@ -38,18 +38,18 @@ function [orb] = LoadSequential(orb)
 %                                   describe the final position of the lambert
 %                          span   = Initial propagation time of the lambert
 
-    orb = LoadState("NRHO",orb);
+    orb = LoadState("RefCapstone",orb);
     orb.seq.Time = cspice_str2et(orb.sat.t0);
 
-    orb.seq.a.type = "TBPOptim";
-    orb.seq.a.T = 5.7444e+05;
+    orb.seq.a.type = "Propag";
+    orb.seq.a.span = 2*86400;
 
-    % orb.seq.b.type = "Lambert";
-    % orb.seq.b.stop = "ELFO";
-    % orb.seq.b.span = 2*3600;
-    % 
-    % orb.seq.c.type = "DVPropag";
-    % orb.seq.c.Orbi = "ELFO";
-    % orb.seq.c.span = 6*3600;
+    orb.seq.b.type = "Lambert";
+    orb.seq.b.stop = "ELFO";
+    orb.seq.b.span = 2*3600;
+
+    orb.seq.c.type = "DVPropag";
+    orb.seq.c.Orbi = "ELFO";
+    orb.seq.c.span = 3*3600;
 end
 
