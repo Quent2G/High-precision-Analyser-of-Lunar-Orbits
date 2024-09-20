@@ -2,7 +2,7 @@
 
 # Description
 
-HALO is a mission design tool build on a high accuracy propagator for lunar orbits. It intends to help to study any orbits in the vicinity of the Moon. HALO comes with a scientific paper that precisely define all the models and algorithms used and go through a sensitivity analysis on lunar orbits of interest.
+HALO is a mission design tool build on a high accuracy propagator for lunar orbits. It intends to help to study any orbits in the vicinity of the Moon. HALO comes with a scientific paper that precisely define all the models and algorithms used and go through a sensitivity analysis on lunar orbits of interest. This paper High-precision_Analyser_of_Lunar_Orbit.pdf can be found at the root of the GitHub, it is highly recommended to get a good look at the paper when using HALO.
 
 # Initialisation
 
