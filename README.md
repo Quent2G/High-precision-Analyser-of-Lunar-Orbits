@@ -22,6 +22,14 @@ Attention for Mac users with a Mac processor (no problem with Intel processors),
 3. A new mex file mice.mexmaci64 should be generated in the lib sub directory;
 4. Copy the whole mice directory to your project directory in MATLAB/HALO.
 
+### List of all Python modules
+- matplotlib
+- spiceypy
+- numpy
+- tqdm
+- pandas
+- pymatreader
+
 # Usage
 
 The MATLAB folder contains all you need to run the tool.  
