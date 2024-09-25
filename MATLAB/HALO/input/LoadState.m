@@ -3,7 +3,8 @@ function [orb] = LoadState(Orbit,orb)
 %interest. 
 %       The Orbits called "RefSpacecraft" are the orbit of interest used in the paper.
 %       The NRHO and DRO14 are CR3BP orbits (close to the Capstone and Orion one) fitted to ephemeris model.
-%       ELFO is a simple Elliptical Lunar Frozen Orbit found in a study.
+%       ELFO is an Elliptical Lunar Frozen Orbit.
+%       An exemple for Keplerian coordinates, Kepl, was also added
 %       The user can add new ones or modify the "Perso" Orbit in last position.
 
     if Orbit == "NRHO"
@@ -97,6 +98,19 @@ function [orb] = LoadState(Orbit,orb)
         
         Time = '2020 Feb 01 00:00:00.000';  % start time [yyyy month dd hh:mm:ss.---]
     
+    elseif Orbit == "Kepl"
+        RefS = 'MOON_ME';   % Reference System (J2000/MOON_ME)
+        CoordT = 'Keplerian'; %Coordinates Type (Cartesian/Keplerian)
+
+        SMA = 1800;        % semi-major axis             [km]
+        ECC = 0;           % eccentricity
+        INC = 90;          % inclination                 [°]
+        LAN = 0;           % longitude of ascending node [°]
+        AOP = 45;          % argument of pericenter      [°]
+        MA = 0;            % true anomaly                [°]
+        
+        Time = '2020 Feb 01 00:00:00.000';  % start time [yyyy month dd hh:mm:ss.---]
+    
     elseif Orbit == "Perso"
         RefS = 'J2000';   % Reference System (J2000/MOON_ME)
         CoordT = 'Cartesian'; %Coordinates Type (Cartesian/Keplerian)
@@ -115,33 +129,34 @@ function [orb] = LoadState(Orbit,orb)
 % position and velocity
     % =========================================================================% 
     orb.frame.initstate = RefS;
+    et = cspice_str2et(Time);
     if strcmp(CoordT,'Cartesian')
         orb.sat.X0 = [X,Y,Z,VX,VY,VZ];
         if ~strcmp(orb.frame.initstate,{'ICRF','J2000'})
-            Rgeog_iner = cspice_sxform(orb.frame.initstate,orb.frame.to,orb.epoch.et(1));
+            Rgeog_iner = cspice_sxform(orb.frame.initstate,orb.frame.to,et);
             orb.sat.X0iner = Rgeog_iner*orb.sat.X0;
         else
             orb.sat.X0iner = orb.sat.X0;
         end
     else
-        orb.sat.keplstate(1,1:2) = {'SMA',SMA};        % semi-major axis             [km]
-        orb.sat.keplstate(2,1:2) = {'ECC',ECC};        % Y-Coordinate
-        orb.sat.keplstate(3,1:2) = {'INC',INC*(pi/180)};  % Z-Coordinate                 [rad]
-        orb.sat.keplstate(4,1:2) = {'LAN',LAN*(pi/180)};   % X-Velocity Coordinate [rad]
+        orb.sat.keplstate(1,1:2) = {'SMA',SMA};            % semi-major axis             [km]
+        orb.sat.keplstate(2,1:2) = {'ECC',ECC};            % eccentricity
+        orb.sat.keplstate(3,1:2) = {'INC',INC*(pi/180)};   % inclination                 [rad]
+        orb.sat.keplstate(4,1:2) = {'LAN',LAN*(pi/180)};   % longitude of ascending node [rad]
         orb.sat.keplstate(5,1:2) = {'AOP',AOP*(pi/180)};   % argument of pericenter      [rad]
-        orb.sat.keplstate(6,1:2)  = {'MA',MA*(pi/180)};
+        orb.sat.keplstate(6,1:2) = {'MA',MA*(pi/180)};     % true anomaly                [rad]
         orb.sat.X0 = (cspice_conics([ orb.sat.keplstate{1,2}*(1-orb.sat.keplstate{2,2}),orb.sat.keplstate{2,2},orb.sat.keplstate{3,2},...
                                     orb.sat.keplstate{4,2},orb.sat.keplstate{5,2},orb.sat.keplstate{6,2},...
-                                    orb.epoch.et(1),orb.centralPlanet.GM]',orb.epoch.et(1)))';
+                                    et,orb.centralPlanet.GM]',et))';
         if ~strcmp(orb.frame.initstate,{'ICRF','J2000'})
-            Rgeog_iner = cspice_pxform(orb.frame.initstate,orb.frame.to,orb.epoch.et(1));
+            Rgeog_iner = cspice_pxform(orb.frame.initstate,orb.frame.to,et);
             orb.sat.X0iner(1:3,1) = Rgeog_iner*orb.sat.X0(1,1:3)';
             orb.sat.X0iner(4:6,1) = Rgeog_iner*orb.sat.X0(1,4:6)';
         else
             orb.sat.X0iner = orb.sat.X0;
         end
     end
-    orb.sat.t0 = Time;
+    orb.sat.t0 = et;
     % =========================================================================% 
 
 end

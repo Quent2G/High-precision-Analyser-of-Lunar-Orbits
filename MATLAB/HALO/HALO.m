@@ -33,12 +33,9 @@
     cspice_kclear; 
     metakernelcheck;
     cspice_furnsh('metakernel.tm');
-
-%% FORCE MODEL
-    orb = struct();
-    orb = LoadModel("Ref",orb);
     
 %% Initialization
+    orb = struct();
     orb = LoadSequential(orb);
     Time = orb.seq.Time;
 

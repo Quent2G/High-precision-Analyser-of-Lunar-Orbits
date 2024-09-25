@@ -19,6 +19,7 @@ fig = plt.figure(figsize=(10,8))
 ax = plt.axes(projection='3d')
 
 ### User's choice
+MoonSphere =  0                                 #1 if the Moon is drawn as a sphere, 0 for a point
 RotationalF = 0                                 #Plot the sequential in the Earth-Moon rotational frame (0=inertial)
 Converged =   0                                 #Plot the initial and converged trajectory (for optimization mode)
 earth =       0                                 #Plot the earth (only in rotat. frame)
@@ -41,7 +42,7 @@ for e in list(mat["orb"]["seq"].keys())[1:]:
     Plot = Ssat
 
     ###Plot the propagation
-    ax.plot(Plot[:,0],Plot[:,1],Plot[:,2],label="seq "+e)
+    ax.plot(Plot[:,0],Plot[:,1],Plot[:,2],label="seq "+e,zorder=10)
     ax.scatter(Plot[0,0],Plot[0,1],Plot[0,2])
 
     ###Plot depending on user's choice
@@ -66,7 +67,15 @@ if earth: ax.plot(SEarth[:,0],SEarth[:,1],SEarth[:,2],c="c",label="Earth")
 ax.set_xlabel('X (km)')
 ax.set_ylabel('Y (km)')
 ax.set_zlabel('Z (km)')
-ax.scatter(0,0,0,c="gray",label = "Moon")
+if MoonSphere:   #Plot moon
+    rM = 1738
+    u = np.linspace(0, 2 * np.pi, 50)
+    v = np.linspace(0, np.pi, 50)
+    x = rM * np.outer(np.cos(u), np.sin(v))
+    y = rM * np.outer(np.sin(u), np.sin(v))
+    z = rM * np.outer(np.ones(np.size(u)), np.cos(v))
+    ax.plot_surface(x, y, z,cmap = "gray",zorder=0)
+else: ax.scatter(0,0,0,c="gray",label = "Moon")
 plt.legend()
 plt.axis("equal")
 sp.kclear()

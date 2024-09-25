@@ -1,7 +1,8 @@
 function [orb] = LoadSequential(orb)
 %LOADSEQUENTIAL The mission's design is expressed in this function
 %   The initial state and time of propagation is chosen first with the help
-%   of the LoadState function
+%   of the LoadState function. Then the model is chosen with the help of
+%   LoadModel. See the input functions
 %
 %   Then each sequence of the mission is a letter (alphabetic order).
 %   The sequence type can be among the five following:
@@ -39,7 +40,8 @@ function [orb] = LoadSequential(orb)
 %                          span   = Initial propagation time of the lambert
 
     orb = LoadState("RefCapstone",orb);
-    orb.seq.Time = cspice_str2et(orb.sat.t0);
+    orb = LoadModel("Ref",orb);
+    orb.seq.Time = orb.sat.t0;
 
     orb.seq.a.type = "Propag";
     orb.seq.a.span = 2*86400;
