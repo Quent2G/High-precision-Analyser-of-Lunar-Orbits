@@ -6,9 +6,9 @@
 % attraction of third bodies and considering the asymettry of
 % the central planet gravity field. It has to be used in the call
 % of ode functions as follows
-% [t,X] = ode45(@prophpop,tspan,X0,options,model)
+% [t,X] = ode113(@prophpop,tspan,X0,options,model)
 %
-% INPUT ODE45 FOR PROPHPOP
+% INPUT ODE113 FOR PROPHPOP
 % --------------------------------------------------------------------------
 % tspan  = time vector for the integration [s]
 % X0     = initial state [km for position, km/s for velocity] (1x6)

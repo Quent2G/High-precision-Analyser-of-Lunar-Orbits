@@ -67,6 +67,12 @@ Finally, Visualisation.py allows to visualise the initial guess and the converge
 
 The same can be done for DRO14, with a period of 14 days, but the convergence is a bit harder so that we have to change n=2 (in the algorithm's file) and use only two periods due to the long period of the DRO.
 
+### Some useful functions
+sp.dafec(sp.spklef("input/LRO_ES_90_202003_GRGM900C_L600.bsp"),1000)    :    Allows to assess the comment of a bsp file
+sp.datetime2et(sp.datetime(y, m, d, h, m, s))                           :    Converts a UTC time to ET
+
+See also part 4.3.5 of the paper for time and coordinate systems handling in either MATLAB and Python.
+
 # Authors and acknowledgment
 
 Creator of the Github and first contributor to the project: Quentin Granier, Research Associate.  
