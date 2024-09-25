@@ -12,7 +12,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 import spiceypy as sp
-import datetime as dt
 from tqdm import tqdm
 from process import read_horizon
 
