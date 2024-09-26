@@ -102,7 +102,7 @@ function [orb] = LoadState(Orbit,orb)
         RefS = 'MOON_ME';   % Reference System (J2000/MOON_ME)
         CoordT = 'Keplerian'; %Coordinates Type (Cartesian/Keplerian)
 
-        SMA = 1800;        % semi-major axis             [km]
+        SMA = 1738+100;        % semi-major axis             [km]
         ECC = 0;           % eccentricity
         INC = 90;          % inclination                 [°]
         LAN = 0;           % longitude of ascending node [°]

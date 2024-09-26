@@ -1,8 +1,8 @@
 function [orb] = LoadSequential(orb)
 %LOADSEQUENTIAL The mission's design is expressed in this function
-%   The model is chosen first with the help of the LoadModel function. Then the 
-%   initial state and time of propagation are chosen with the help
-%   of LoadState. See the functions in the input folder
+%   The model is chosen with the help of the LoadModel function The initial state and time of propagation is chosen first with the help
+%   of the LoadState function. Then the model is chosen with the help of
+%   LoadModel. See the input functions
 %
 %   Then each sequence of the mission is a letter (alphabetic order).
 %   The sequence type can be among the five following:
