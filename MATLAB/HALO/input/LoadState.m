@@ -4,7 +4,7 @@ function [orb] = LoadState(Orbit,orb)
 %       The Orbits called "RefSpacecraft" are the orbit of interest used in the paper.
 %       The NRHO and DRO14 are CR3BP orbits (close to the Capstone and Orion one) fitted to ephemeris model.
 %       ELFO is an Elliptical Lunar Frozen Orbit.
-%       An exemple for Keplerian coordinates, Kepl, was also added
+%       An exemple for Keplerian coordinates, Kepl and Kepl2, were also added.
 %       The user can add new ones or modify the "Perso" Orbit in last position.
 
     if Orbit == "NRHO"
@@ -102,7 +102,7 @@ function [orb] = LoadState(Orbit,orb)
         RefS = 'MOON_ME';   % Reference System (J2000/MOON_ME)
         CoordT = 'Keplerian'; %Coordinates Type (Cartesian/Keplerian)
 
-        SMA = 1738+100;        % semi-major axis             [km]
+        SMA = 1738+100;    % semi-major axis             [km]
         ECC = 0;           % eccentricity
         INC = 90;          % inclination                 [°]
         LAN = 0;           % longitude of ascending node [°]
@@ -111,6 +111,19 @@ function [orb] = LoadState(Orbit,orb)
         
         Time = '2020 Feb 01 00:00:00.000';  % start time [yyyy month dd hh:mm:ss.---]
     
+    elseif Orbit == "Kepl2"
+        RefS = 'MOON_ME';   % Reference System (J2000/MOON_ME)
+        CoordT = 'Keplerian2'; %Coordinates Type: Similar as Keplerian but 
+                               % with a different definition of the ellipse geometry
+
+        PER = 1738+100;    % perilune                    [km]
+        APO = 1738+1000;   % apolune                     [km]
+        INC = 90;          % inclination                 [°]
+        LAN = 0;           % longitude of ascending node [°]
+        AOP = 45;          % argument of pericenter      [°]
+        MA = 0;            % true anomaly                [°]
+        
+        Time = '2020 Feb 01 00:00:00.000';  % start time [yyyy month dd hh:mm:ss.---]
     elseif Orbit == "Perso"
         RefS = 'J2000';   % Reference System (J2000/MOON_ME)
         CoordT = 'Cartesian'; %Coordinates Type (Cartesian/Keplerian)
@@ -139,8 +152,13 @@ function [orb] = LoadState(Orbit,orb)
             orb.sat.X0iner = orb.sat.X0;
         end
     else
-        orb.sat.keplstate(1,1:2) = {'SMA',SMA};            % semi-major axis             [km]
-        orb.sat.keplstate(2,1:2) = {'ECC',ECC};            % eccentricity
+        if strcmp(CoordT,'Keplerian')
+            orb.sat.keplstate(1,1:2) = {'SMA',SMA};            % semi-major axis         [km]
+            orb.sat.keplstate(2,1:2) = {'ECC',ECC};            % eccentricity
+        else
+            orb.sat.keplstate(1,1:2) = {'SMA',(APO+PER)/2};            % perilune                [km]
+            orb.sat.keplstate(2,1:2) = {'ECC',1-PER/orb.sat.keplstate{1,2}};            % apolune                 [km]
+        end
         orb.sat.keplstate(3,1:2) = {'INC',INC*(pi/180)};   % inclination                 [rad]
         orb.sat.keplstate(4,1:2) = {'LAN',LAN*(pi/180)};   % longitude of ascending node [rad]
         orb.sat.keplstate(5,1:2) = {'AOP',AOP*(pi/180)};   % argument of pericenter      [rad]
