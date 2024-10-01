@@ -4,7 +4,7 @@ function [orb] = LoadState(Orbit,orb)
 %       The Orbits called "RefSpacecraft" are the orbit of interest used in the paper.
 %       The NRHO and DRO14 are CR3BP orbits (close to the Capstone and Orion one) fitted to ephemeris model.
 %       ELFO is an Elliptical Lunar Frozen Orbit.
-%       An exemple for Keplerian coordinates, Kepl and Kepl2, were also added.
+%       Two examples/templates for Keplerian coordinates, Kepl and Kepl2, were also added.
 %       The user can add new ones or modify the "Perso" Orbit in last position.
 
     if Orbit == "NRHO"
