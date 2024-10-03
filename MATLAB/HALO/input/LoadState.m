@@ -147,7 +147,7 @@ function [orb] = LoadState(Orbit,orb)
         orb.sat.X0 = [X,Y,Z,VX,VY,VZ];
         if ~strcmp(orb.frame.initstate,{'ICRF','J2000'})
             Rgeog_iner = cspice_sxform(orb.frame.initstate,orb.frame.to,et);
-            orb.sat.X0iner = Rgeog_iner*orb.sat.X0;
+            orb.sat.X0iner = Rgeog_iner*orb.sat.X0';
         else
             orb.sat.X0iner = orb.sat.X0;
         end
