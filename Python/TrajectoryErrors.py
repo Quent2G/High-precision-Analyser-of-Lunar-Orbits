@@ -36,8 +36,8 @@ SC = "LRO"
 
 ### Load data from the downloaded horizon file
 if h:
-    Hrz = read_horizon("input/Orion29_16.txt")
-    # Hrz = read_horizon("input/CAPSTONE_25_00__01_12.txt")
+    # Hrz = read_horizon("input/Orion29_16.txt")
+    Hrz = read_horizon("input/CAPSTONE_25_00__01_12.txt")
 
 ### Plot trajectory with moon
 if g:
@@ -54,14 +54,14 @@ if g:
     ax.plot_surface(x, y, z,cmap = "gray",zorder=1)
 
     #Plot traj
-    ax.plot(XJ2000[:,0],XJ2000[:,1],XJ2000[:,2],"r",zorder=10,label="Traj")
+    ax.plot(XJ2000[:,0],XJ2000[:,1],XJ2000[:,2],"r",zorder=10,label="Trajectory")
     ax.set_xlabel('X (km)')
     ax.set_ylabel('Y (km)')
     ax.set_zlabel('Z (km)')
 
     # Plot SC initial position
     state = XJ2000[0]
-    ax.plot(state[0],state[1],state[2],"b.",zorder=10,label="Initial pos")        #Starting point
+    ax.plot(state[0],state[1],state[2],"b.",zorder=10,label="Initial Pos")        #Starting point
 
     # Plot SC final position
     if h: 
@@ -72,7 +72,7 @@ if g:
 
     # Plot final position of propagation
     state = XJ2000[-1]
-    ax.plot(state[0],state[1],state[2],"y.",zorder=10,label="Final Pos Propag")        #Starting point All
+    ax.plot(state[0],state[1],state[2],"y.",zorder=10,label="Final Pos Propagation")        #Ending point All
     ax.legend()
     plt.axis("equal")
 
@@ -84,7 +84,11 @@ for _ in range(6):Err.append([])
 
 for i in tqdm(range(len(XJ2000))):
     Time = T[i]
-    state = sp.spkezr(SC,Time,"J2000","NONE","MOON")[0]
+    # Plot SC final position
+    if h: 
+        state = Hrz.loc[i]
+        state = [state["X"],state["Y"],state["Z"],state["VX"],state["VY"],state["VZ"]]
+    else: state = sp.spkezr(SC,Time,"J2000","NONE","MOON")[0]
     for j in range(6):
         Err[j].append(state[j]-XJ2000[i,j])
     
@@ -95,10 +99,10 @@ Error3D = [np.sqrt((np.array(Err[:3])**2).sum(0))*1e3,np.sqrt((np.array(Err[3:])
 for i in range(2):
     axes[i].plot((T-T[0])/3600,Error3D[i],
                    label="RMSE = "+'{:.2f}'.format(np.sqrt((Error3D[i]**2).sum()/len(Error3D[i])))+[" m"," cm/s"][i])
-    axes[i].set_xlabel('hours')
     axes[i].set_ylabel(f'error in {["position (m)","velocity (cm/s)"][i]}')
     # axes[i].set_ylim(0,[300,30][i])
     axes[i].legend()
+axes[i].set_xlabel('hours')
 
 ### Close the kernels used and show graphs
 sp.kclear()
